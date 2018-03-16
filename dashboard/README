@@ -1,0 +1,33 @@
+pour l'instant, c'est un peu un démonstrateur, il n'y a que la base de spring
++ jetty, mais qu'est-ce que c'est unfriendly à setup putain.. ^^
+
+pour compiler:
+mvn package -> si t'as des soucis pour compiler, n'hésite pas à me paste ton
+build fail, c'est très probablement du à une couille dans le pom.xml
+pour run:
+mvn spring-boot:run
+
+pour te donner de la visibilité sur le code :
+sources dans src/main/java/eu/epitech/java
+
+sources html dans src/main/resources (spring sait automatiquement détecter et
+    implémenter des assets comme favicon.ico, ou bien les fichiers d'erreurs
+    HTTP s'ils sont rangés au bon endroit)
+
+fichier de personnalisation d'options basiques pour String :
+src/main/resources/application.properties
+
+App.java : point d'entrée / initialisation du prog
+controller/Routing.java -> des controleurs pour gérer les routes http
+
+Par défaut le serveur écoute sur 8080
+
+Tu peux tester ces routes de tests : get /
+                                     get /teub
+                                     get /get/{id}
+                                     get /efojzijfe (une mauvaise route)
+
+Perso je me remets sur le code demain soir, j'ai des trucs à faire pour la
+boite demain
+
+a+ et Good luck, tiens-moi au courant de ce que tu fais :)
