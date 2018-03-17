@@ -1,4 +1,4 @@
-eu/epitech/java/controller/Routing$bController.class
-eu/epitech/java/controller/Routing$TwitterController.class
-eu/epitech/java/controller/Routing.class
+eu/epitech/java/controller/FeedController.class
+eu/epitech/java/controller/TwitterController.class
+eu/epitech/java/service/TwitterService.class
 eu/epitech/java/App.class
