@@ -16,11 +16,9 @@ import java.util.Iterator;
 import java.util.List;
 
 @Service
-public class TwitterService
+public class TwitterService extends AService
 {
     private Twitter twitter;
-
-    private ConnectionRepository connectionRepository;
 
     @Autowired
     public TwitterService(Twitter twitter, ConnectionRepository connectionRepository)
@@ -29,11 +27,9 @@ public class TwitterService
         this.connectionRepository = connectionRepository;
     }
 
-    private boolean isConnected()
-    {
-        if (connectionRepository.findPrimaryConnection(Twitter.class) == null)
-            return false;
-        return true;
+    @Override
+    public Class getController() {
+        return Twitter.class;
     }
 
     private CursoredList<TwitterProfile> getLastFriends()
