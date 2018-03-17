@@ -1,6 +1,7 @@
 package eu.epitech.java.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.social.twitter.api.Tweet;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -11,6 +12,8 @@ import org.springframework.social.twitter.api.CursoredList;
 import org.springframework.social.twitter.api.Twitter;
 import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.ui.Model;
+
+import java.util.List;
 
 @Controller
 public class TwitterController
@@ -37,6 +40,8 @@ public class TwitterController
         model.addAttribute(twitter.userOperations().getUserProfile());
         CursoredList<TwitterProfile> friends = twitter.friendOperations().getFriends();
         model.addAttribute("friends", friends);
+        List<Tweet> mentions = twitter.timelineOperations().getMentions();
+        model.addAttribute("mentions", mentions);
         return "twitter";
     }
 

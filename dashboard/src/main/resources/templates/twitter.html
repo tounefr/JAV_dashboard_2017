@@ -1,22 +1,29 @@
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:include="layout :: htmlhead" th:with="title='Connect'"></head>
+  <head th:include="layout :: htmlhead" th:with="title='Connect'"></head>
 
-<body>
-<div th:replace="layout :: navbar">(navbar)</div>
+  <body>
+    <div th:replace="layout :: navbar">(navbar)</div>
 
-<div class="container">
-	<div class="starter-template">
-		<h3>Hello, <span th:text="${twitterProfile.name}">Some User</span>!</h3>
+    <div class="container">
+      <div class="starter-template">
+        <h3>Hello, <span th:text="${twitterProfile.name}">Some User</span>!</h3>
 
-		<h4>These are your friends:</h4>
+        <h4>These are your friends:</h4>
 
-		<ul>
-			<li th:each="friend:${friends}" th:text="${friend.name}">Friend</li>
-		</ul>
-	</div>
-</div>
+        <ul>
+          <li th:each="friend:${friends}" th:text="${friend.name}">Friend</li>
+        </ul>
 
-<div th:include="layout :: footer" id="footer">(footer)</div>
 
-</body>
+        <h4>These are your mentions:</h4>
+
+        <ul>
+          <li th:each="mention:${mentions}" th:text="${mention.text}">Mention</li>
+        </ul>
+      </div>
+    </div>
+
+    <div th:include="layout :: footer" id="footer">(footer)</div>
+
+  </body>
 </html>
