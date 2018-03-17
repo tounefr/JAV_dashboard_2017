@@ -10,5 +10,12 @@
 		<ul>
 			<li th:each="friend:${friends}" th:text="${friend.name}">Friend</li>
 		</ul>
+
+
+		<h4>These are your mentions:</h4>
+
+		<ul>
+			<li th:each="mention:${mentions}" th:text="${mention.text}">Mention</li>
+		</ul>
 	</body>
 </html>

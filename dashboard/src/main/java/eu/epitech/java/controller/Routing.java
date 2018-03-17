@@ -1,21 +1,21 @@
 package eu.epitech.java.controller;
 
-/**
+/*
  * Fichier destiné à la gestion des routes via des "crontroleurs"
  *
- */
+*/
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.social.twitter.api.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.social.connect.ConnectionRepository;
-import org.springframework.social.twitter.api.CursoredList;
-import org.springframework.social.twitter.api.Twitter;
-import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.ui.Model;
+
+import java.util.List;
 
 @Controller
 public class Routing {
@@ -63,6 +63,8 @@ public class Routing {
 			model.addAttribute(twitter.userOperations().getUserProfile());
 			CursoredList<TwitterProfile> friends = twitter.friendOperations().getFriends();
 			model.addAttribute("friends", friends);
+            List<Tweet> mentions = twitter.timelineOperations().getMentions();
+            model.addAttribute("mentions", mentions);
 			return "twitter";
 		}
 
