@@ -1,6 +1,6 @@
 package eu.epitech.java.controller;
 
-/**
+/*
  * Fichier destiné à la gestion des routes via des "crontroleurs"
  */
 

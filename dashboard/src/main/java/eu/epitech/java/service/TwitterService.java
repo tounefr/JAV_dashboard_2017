@@ -38,8 +38,7 @@ public class TwitterService
 
     private CursoredList<TwitterProfile> getLastFriends()
     {
-        CursoredList<TwitterProfile> friends = twitter.friendOperations().getFriends();
-        return friends;
+        return twitter.friendOperations().getFriends();
     }
 
     private ArrayList<TweetModel> parseTweets(List<Tweet> tweets)
@@ -60,8 +59,7 @@ public class TwitterService
     private ArrayList<TweetModel> getLastMentions()
     {
         List<Tweet> mentions = twitter.timelineOperations().getMentions();
-        ArrayList<TweetModel> mentionsList = parseTweets(mentions);
-        return mentionsList;
+        return parseTweets(mentions);
     }
 
     private ArrayList<String> getLastFollowers()
@@ -78,15 +76,13 @@ public class TwitterService
 
     private TwitterProfile getMyProfil()
     {
-        TwitterProfile twitterProfile = twitter.userOperations().getUserProfile();
-        return twitterProfile;
+        return twitter.userOperations().getUserProfile();
     }
 
     private ArrayList<TweetModel> getLastTweets()
     {
         List<Tweet> tweets = twitter.timelineOperations().getHomeTimeline();
-        ArrayList<TweetModel> tweetsList = parseTweets(tweets);
-        return tweetsList;
+        return parseTweets(tweets);
     }
 
     public TwitterModel getTwitterDatas()
