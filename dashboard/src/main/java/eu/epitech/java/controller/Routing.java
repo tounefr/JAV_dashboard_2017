@@ -5,6 +5,11 @@ package eu.epitech.java.controller;
  *
 */
 
+
+import java.text.DateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.twitter.api.*;
 import org.springframework.stereotype.Controller;
@@ -19,46 +24,45 @@ import java.util.List;
 
 @Controller
 public class Routing {
-  @Controller
-  public class bController {
-	@RequestMapping(value = "/", method = RequestMethod.GET)
-	  @ResponseBody
-	  public String getIndex() {
-		return "fack";
-	  }
 
-	@RequestMapping("/teub")
-	@ResponseBody
-	public String getTeub() {
-	  return "teub";
-	}
+    @Controller
+    public class bController {
+        @RequestMapping(value = "/", method = RequestMethod.GET)
+        public String getIndex() {
+            return "feed";
+        }
 
-	@RequestMapping("/get/{userID}")
-	@ResponseBody
-	public String getUser(@PathVariable(value="userID") String id) {
-		return ("user id  = " + id + ".");
-	}
-  }
+        @RequestMapping("/teub")
+        @ResponseBody
+        public String getTeub() {
+            return "teub";
+        }
 
+        @RequestMapping("/get/{userID}")
+        @ResponseBody
+        public String getUser(@PathVariable(value = "userID") String id) {
+            return ("user id  = " + id + ".");
+        }
+    }
 
-	@Controller
-	public class TwitterController {
+    @Controller
+    public class TwitterController {
 
-		private Twitter twitter;
+        private Twitter twitter;
 
-		private ConnectionRepository connectionRepository;
+        private ConnectionRepository connectionRepository;
 
-		@Autowired
-		public TwitterController(Twitter twitter, ConnectionRepository connectionRepository) {
-			this.twitter = twitter;
-			this.connectionRepository = connectionRepository;
-		}
+        @Autowired
+        public TwitterController(Twitter twitter, ConnectionRepository connectionRepository) {
+            this.twitter = twitter;
+            this.connectionRepository = connectionRepository;
+        }
 
-		@RequestMapping(value="/twitter", method=RequestMethod.GET)
-		public String getTwitter(Model model) {
-			if (connectionRepository.findPrimaryConnection(Twitter.class) == null) {
-				return "redirect:/connect/twitter";
-			}
+        @RequestMapping(value = "/twitter", method = RequestMethod.GET)
+        public String getTwitter(Model model) {
+            if (connectionRepository.findPrimaryConnection(Twitter.class) == null) {
+                return "redirect:/connect/twitter";
+            }
 
 			model.addAttribute(twitter.userOperations().getUserProfile());
 			CursoredList<TwitterProfile> friends = twitter.friendOperations().getFriends();
@@ -67,6 +71,5 @@ public class Routing {
             model.addAttribute("mentions", mentions);
 			return "twitter";
 		}
-
-	}
+    }
 }
