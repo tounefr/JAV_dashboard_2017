@@ -20,6 +20,7 @@ import org.springframework.social.twitter.api.Twitter;
 import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.ui.Model;
 import eu.epitech.java.service.TwitterService;
+import eu.epitech.java.model.TwitterModel;
 
 @Controller
 public class FeedController
@@ -35,6 +36,9 @@ public class FeedController
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String getIndex(Model model)
     {
+        TwitterModel twitter = twitterService.getTwitterDatas();
+        model.addAttribute("twitter", twitter);
+
         return "feed";
     }
 
