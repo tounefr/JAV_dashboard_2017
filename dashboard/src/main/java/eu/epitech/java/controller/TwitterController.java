@@ -37,7 +37,7 @@ public class TwitterController
             return "redirect:/connect/twitter";
         }
 
-        model.addAttribute(twitter.userOperations().getUserProfile());
+        model.addAttribute("twitterProfile", twitter.userOperations().getUserProfile());
         CursoredList<TwitterProfile> friends = twitter.friendOperations().getFriends();
         model.addAttribute("friends", friends);
         List<Tweet> mentions = twitter.timelineOperations().getMentions();
