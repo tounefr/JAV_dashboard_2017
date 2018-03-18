@@ -34,6 +34,14 @@ public class Currency {
         public String availableSupply;
         @JsonProperty("max_supply")
         public String maxSupply;
+        @JsonProperty("market_cap_eur")
+        public String marketCapEUR;
+        @JsonProperty("market_cap_usd")
+        public String marketCapUSD;
+        @JsonProperty("24h_volume_eur")
+        public String volDayEUR;
+        @JsonProperty("24h_volume_usd")
+        public String volDayUSD;
         @JsonProperty("percent_change_1h")
         public Double jitterHour;
         @JsonProperty("percent_change_24h")
@@ -88,5 +96,21 @@ public class Currency {
     public Double getJitterWeek(final String target) {
         this.load(target);
         return data.jitterWeek;
+    }
+    public String getMarketCapEUR(final String target) {
+        this.load(target);
+        return data.marketCapEUR;
+    }
+    public String getMarketCapUSD(final String target) {
+        this.load(target);
+        return data.marketCapUSD;
+    }
+    public String getVolDayEUR(final String target) {
+        this.load(target);
+        return data.volDayEUR;
+    }
+    public String getVolDayUSD(final String target) {
+        this.load(target);
+        return data.volDayUSD;
     }
 }
