@@ -1,23 +1,19 @@
 package eu.epitech.java.api.CoinMarket.methods;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.springframework.web.client.RestTemplate;
 
-public class Global {
-    private Integer top = 10;
-    private Integer cron = 0;
-    private RestTemplate restTemplate;
+public class Global extends AMethod {
     private GlobalData data;
 
     public Global() {
-        this.restTemplate = new RestTemplate();
         this.data = new GlobalData();
     }
+
     private void load() {
-        this.cron -= 1;
-        if (this.cron <= 0) {
+        if (this.refresh()) {
+            System.out.println("[COINMARKET API] refreshing Global data...");
             this.data = this.restTemplate.getForObject("https://api.coinmarketcap.com/v1/global/?convert={Currency}", GlobalData.class, "EUR");
-            this.cron = this.top;
+            this.refreshed();
         }
     }
     static private class GlobalData {
