@@ -4,15 +4,21 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.web.client.RestTemplate;
 
 public class Global {
+    private Integer top = 10;
+    private Integer cron = 0;
     private RestTemplate restTemplate;
     private GlobalData data;
 
     public Global() {
         this.restTemplate = new RestTemplate();
+        this.data = new GlobalData();
     }
     private void load() {
-        data = restTemplate.getForObject("https://api.coinmarketcap.com/v1/global/?convert={Currency}", GlobalData.class, "EUR");
-        // TODO GESTION ERREUR VIA EXCEPTION
+        this.cron -= 1;
+        if (this.cron <= 0) {
+            this.data = this.restTemplate.getForObject("https://api.coinmarketcap.com/v1/global/?convert={Currency}", GlobalData.class, "EUR");
+            this.cron = this.top;
+        }
     }
     static private class GlobalData {
         @JsonProperty("active_currencies")

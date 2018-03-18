@@ -4,16 +4,24 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.web.client.RestTemplate;
 
 public class Currency {
+    private Integer top = 10;
+    private Integer cron = 0;
+    private String cacheTarget = "";
     private RestTemplate restTemplate;
-    private CurrencyData data = null;
+    private CurrencyData data;
     public Currency() {
         this.restTemplate = new RestTemplate();
+        this.data = new CurrencyData();
     }
     private void load(final String target) {
-        CurrencyData[] buf = restTemplate.getForObject("https://api.coinmarketcap.com/v1/ticker/{Target}?convert={Currency}", CurrencyData[].class, target, "EUR");
-        if (buf.length > 0)
-            this.data = buf[0];
-        // TODO GESTION ERREUR VIA EXCEPTION
+        this.cron -= 1;
+        if (this.cron <= 0 || !target.equals(this.cacheTarget)) {
+            this.cacheTarget = target;
+            CurrencyData[] buf = restTemplate.getForObject("https://api.coinmarketcap.com/v1/ticker/{Target}?convert={Currency}", CurrencyData[].class, target, "EUR");
+            if (buf.length > 0)
+                this.data = buf[0];
+            this.cron = this.top;
+        }
     }
     static private class CurrencyData {
         @JsonProperty("name")
