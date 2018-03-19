@@ -1,19 +1,22 @@
 package eu.epitech.java.api.CoinMarket.methods;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.springframework.web.client.RestTemplate;
 
-public class Currency {
-    private RestTemplate restTemplate;
-    private CurrencyData data = null;
+public class Currency extends AMethod {
+    private String cacheTarget = "";
+    private CurrencyData data;
     public Currency() {
-        this.restTemplate = new RestTemplate();
+        this.data = new CurrencyData();
     }
     private void load(final String target) {
-        CurrencyData[] buf = restTemplate.getForObject("https://api.coinmarketcap.com/v1/ticker/{Target}?convert={Currency}", CurrencyData[].class, target, "EUR");
-        if (buf.length > 0)
-            this.data = buf[0];
-        // TODO GESTION ERREUR VIA EXCEPTION
+        if (!target.equals(this.cacheTarget) || this.refresh()) {
+            System.out.println("[COINMARKET API] refreshing Currency data...");
+            this.cacheTarget = target;
+            CurrencyData[] buf = restTemplate.getForObject("https://api.coinmarketcap.com/v1/ticker/{Target}?convert={Currency}", CurrencyData[].class, target, "EUR");
+            if (buf.length > 0)
+                this.data = buf[0];
+            this.refreshed();
+        }
     }
     static private class CurrencyData {
         @JsonProperty("name")
