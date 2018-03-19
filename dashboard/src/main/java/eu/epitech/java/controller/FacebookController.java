@@ -16,7 +16,6 @@ public class FacebookController
 {
 
     private Facebook facebook;
-
     private ConnectionRepository connectionRepository;
 
     @Autowired
