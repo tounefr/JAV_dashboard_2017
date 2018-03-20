@@ -49,6 +49,19 @@ public class FeedController
         return "teub";
     }
 
+    @RequestMapping("/login")
+    public String getLogin()
+    {
+        return "login";
+    }
+
+    @RequestMapping("/login-error")
+    @ResponseBody
+    public String getError()
+    {
+        return "invalid credentials<br/><a href=\"/login\">Try again</a>";
+    }
+
     @RequestMapping("/get/{userID}")
     @ResponseBody
     public String getUser(@PathVariable(value = "userID") String id)
