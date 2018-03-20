@@ -2,3 +2,4 @@
 dashboard/*.log
 .git
 dashboard/target
+node_modules/
