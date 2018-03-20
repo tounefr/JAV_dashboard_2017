@@ -5,13 +5,14 @@ import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.social.facebook.api.Facebook;
 import org.springframework.social.facebook.api.PagedList;
 import org.springframework.social.facebook.api.Reference;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.social.facebook.api.User;
 
-
-@Controller
+@RestController
 public class FacebookController
 {
 
@@ -25,17 +26,15 @@ public class FacebookController
         this.connectionRepository = connectionRepository;
     }
 
-    @RequestMapping(value = "/facebook", method = RequestMethod.GET)
-    public String getFacebook(Model model)
+    @RequestMapping(value = "/facebook/profile", method = RequestMethod.GET)
+    public User getProfile()
     {
-        if (connectionRepository.findPrimaryConnection(Facebook.class) == null) {
-            return "redirect:/connect/facebook";
-        }
+        return facebook.userOperations().getUserProfile();
+    }
 
-        model.addAttribute("facebookProfile", facebook.userOperations().getUserProfile());
-        PagedList<Reference> friends = facebook.friendOperations().getFriends();
-        model.addAttribute("friends", friends);
-
-        return "facebook";
+    @RequestMapping(value = "/facebook/friends", method = RequestMethod.GET)
+    public PagedList<Reference> getFriends()
+    {
+        return facebook.friendOperations().getFriends();
     }
 }
