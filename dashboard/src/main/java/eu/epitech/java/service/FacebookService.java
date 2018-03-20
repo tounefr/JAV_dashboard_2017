@@ -1,6 +1,5 @@
 package eu.epitech.java.service;
 
-import eu.epitech.java.model.FacebookModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.social.facebook.api.Facebook;
@@ -28,8 +27,7 @@ public class FacebookService extends AService {
         return Facebook.class;
     }
 
-    private ArrayList<String> getFriends()
-    {
+    private ArrayList<String> getFriends() {
         ArrayList<String> friendsNames = new ArrayList<String>();
         PagedList<Reference> friends = facebook.friendOperations().getFriends();
         Iterator<Reference> iterator = friends.iterator();
@@ -38,12 +36,5 @@ public class FacebookService extends AService {
             friendsNames.add(reference.getName());
         }
         return friendsNames;
-    }
-
-    public FacebookModel getFacebookDatas()
-    {
-        FacebookModel facebookModel = new FacebookModel();
-        facebookModel.setFriends(getFriends());
-        return facebookModel;
     }
 }
