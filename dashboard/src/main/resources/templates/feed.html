@@ -1,119 +1,179 @@
 
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:include="layout :: htmlhead" th:with="title='Feed'"></head>
+<head th:include="layout :: htmlhead" th:with="title='Feed'">
+    <style>
+        .panel {
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
 
 <body>
 <div th:replace="layout :: navbar">(navbar)</div>
 
 <div class="container-fluid">
 
-    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-        <div class="panel panel-primary">
-            <div class="panel-heading" role="tab" id="headingOne">
-                <h4 class="panel-title">
-                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                        Twitter
-                    </a>
-                </h4>
-            </div>
-            <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
-                <div class="panel-body">
+    <div class="col-md-12">
 
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title">Statistics</h3>
+        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+            <div class="panel panel-primary">
+                <div class="panel-heading" role="tab" id="headingOne">
+                    <h4 class="panel-title">
+                        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            <div class="row">
+                                <div class="col-md-6">Twitter</div>
+                                <div class="col-md-6 text-right">
                                 </div>
-                                <div class="panel-body text-center">
-                                    <div class="col-md-3">
-                                        <h3 th:text="${twitter.getNbTweets()}">0</h3>
-                                        <p>Tweets</p>
+                            </div>
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                    <div class="panel-body">
+                        <div th:if="${twitter.isConnected()}">
+                            <div class="row">
+                                <div class="col-md-12">
+
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">Statistics</h3>
+                                        </div>
+                                        <div class="panel-body text-center">
+                                            <div class="col-md-3">
+                                                <h3 th:text="${twitter.getNbTweets()}">0</h3>
+                                                <p>Tweets</p>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <h3 th:text="${twitter.getNbFollowers()}">0</h3>
+                                                <p>Followers</p>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <h3 th:text="${twitter.getNbSubscriptions()}">0</h3>
+                                                <p>Subscriptions</p>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <h3 th:text="${twitter.getNbLikes()}">0</h3>
+                                                <p>Likes</p>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="col-md-3">
-                                        <h3 th:text="${twitter.getNbFollowers()}">0</h3>
-                                        <p>Followers</p>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">Last mentions</h3>
+                                        </div>
+                                        <div class="panel-body">
+                                            <ul>
+                                                <li th:each="mention: ${twitter.getLastMentions()}" th:text="${mention.getFromUser()} + ' : ' + ${mention.getContent()}"></li>
+                                            </ul>
+                                        </div>
                                     </div>
-                                    <div class="col-md-3">
-                                        <h3 th:text="${twitter.getNbSubscriptions()}">0</h3>
-                                        <p>Subscriptions</p>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">Last follows</h3>
+                                        </div>
+                                        <div class="panel-body">
+                                            <ul>
+                                                <li th:each="follower: ${twitter.getLastFollowers()}" th:text="${follower}"></li>
+                                            </ul>
+                                        </div>
                                     </div>
-                                    <div class="col-md-3">
-                                        <h3 th:text="${twitter.getNbLikes()}">0</h3>
-                                        <p>Likes</p>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">Last tweets</h3>
+                                        </div>
+                                        <div class="panel-body">
+                                            <ul>
+                                                <li th:each="tweet: ${twitter.getLastTweets()}" th:text="${tweet.getContent()}"></li>
+                                            </ul>
+                                        </div>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div th:unless="${twitter.isConnected()}">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <form action="/connect/twitter" method="POST">
+                                        <button type="submit" class="btn btn-success">Se connecter</button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+            <div class="panel panel-primary">
+                <div class="panel-heading" role="tab" id="headingTwo">
+                    <h4 class="panel-title">
+                        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+                            Crypto currencies
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapseTwo" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTwo">
+                    <div class="panel-body">
 
-                    <div class="row">
-                        <div class="col-md-4">
+                        <div th:each="currency: ${currencies}" class="col-md-4">
                             <div class="panel panel-default">
                                 <div class="panel-heading">
-                                    <h3 class="panel-title">Last mentions</h3>
+                                    <h3 class="panel-title" th:text="${currency.key}"></h3>
                                 </div>
-                                <div class="panel-body">
-                                    <ul>
-                                        <li th:each="mention: ${twitter.getLastMentions()}" th:text="${mention.getFromUser()} + ' : ' + ${mention.getContent()}"></li>
-                                    </ul>
+                                <div class="panel-body" th:text="${currency.value + 'EUR'}">
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title">Last follows</h3>
-                                </div>
-                                <div class="panel-body">
-                                    <ul>
-                                        <li th:each="follower: ${twitter.getLastFollowers()}" th:text="${follower}"></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title">Last tweets</h3>
-                                </div>
-                                <div class="panel-body">
-                                    <ul>
-                                        <li th:each="tweet: ${twitter.getLastTweets()}" th:text="${tweet.getContent()}"></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
+
                     </div>
+                </div>
+            </div>
+            <div class="panel panel-primary">
+                <div class="panel-heading" role="tab" id="headingThree">
+                    <h4 class="panel-title">
+                        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
+                            <div class="row">
+                                <div class="col-md-6">Facebook</div>
+                                <div class="col-md-6 text-right"></div>
+                            </div>
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapseThree" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingThree">
+                    <div class="panel-body">
 
-                </div>
-            </div>
-        </div>
-        <div class="panel panel-primary">
-            <div class="panel-heading" role="tab" id="headingTwo">
-                <h4 class="panel-title">
-                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                        Crypto currencies
-                    </a>
-                </h4>
-            </div>
-            <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
-                <div class="panel-body">
-                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-                </div>
-            </div>
-        </div>
-        <div class="panel panel-primary">
-            <div class="panel-heading" role="tab" id="headingThree">
-                <h4 class="panel-title">
-                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                        Facebook
-                    </a>
-                </h4>
-            </div>
-            <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
-                <div class="panel-body">
-                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                        <div class="row" th:if="${facebook.isConnected()}">
+                            <div class="col-md-6">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">Last friends</h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <ul>
+                                            <li></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" th:unless="${facebook.isConnected()}">
+                            <div class="col-md-12">
+                                <form action="/connect/facebook" method="POST">
+                                    <button type="submit" class="btn btn-success">Se connecter</button>
+                                </form>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
             </div>
         </div>
