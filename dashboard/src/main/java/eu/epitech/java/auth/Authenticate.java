@@ -14,7 +14,7 @@ public class Authenticate extends WebSecurityConfigurerAdapter {
                 .formLogin().loginPage("/login").failureUrl("/login-error")
                 .and()
                 .authorizeRequests()
-                    .antMatchers("/login", "/css/**", "/error").permitAll()
+                    .antMatchers("/login**", "/css/**", "/error").permitAll()
                     .antMatchers("/**").hasRole("USER")
                 ;
         http.csrf().disable(); // on est en localhost
