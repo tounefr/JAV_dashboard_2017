@@ -1,4 +1,4 @@
-package eu.epitech.java.entity;
+package eu.epitech.java.modules;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

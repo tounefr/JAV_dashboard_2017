@@ -5,8 +5,8 @@ package eu.epitech.java;
  *
  */
 
-import eu.epitech.java.entity.Module;
-import eu.epitech.java.repositories.ModuleRepository;
+import eu.epitech.java.modules.Module;
+import eu.epitech.java.modules.ModuleRepository;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -22,5 +22,6 @@ public class App {
         //test
         ModuleRepository repo = context.getBean(ModuleRepository.class);
         repo.save(new Module());
+        System.out.println(repo.count());
     }
 }
