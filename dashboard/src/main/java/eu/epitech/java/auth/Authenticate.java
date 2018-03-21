@@ -14,10 +14,11 @@ public class Authenticate extends WebSecurityConfigurerAdapter {
                 .formLogin().loginPage("/login").failureUrl("/login-error")
                 .and()
                 .authorizeRequests()
-                    .antMatchers("/login**", "/css/**", "/error").permitAll()
+                    .antMatchers("/login**", "/css/**", "/error", "/h2admin/**").permitAll()
                     .antMatchers("/**").hasRole("USER")
                 ;
         http.csrf().disable(); // on est en localhost
+        http.headers().frameOptions().sameOrigin(); // autoriser les frames pour h2console (h2admin)
     }
 
     @Autowired
