@@ -19,6 +19,7 @@ public class AuthenticationController {
         if (SecurityContextHolder.getContext().getAuthentication().getPrincipal() != null) {
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             if (!(auth instanceof AnonymousAuthenticationToken)) {
+                System.out.println("ALREADY LOGGED IN");
                 return "/"; // TODO ici à cause du ModelAttribute ça redirect pas, mais ici faut redirect l'user car déjà authentifié :)
             }
         }
