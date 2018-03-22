@@ -5,8 +5,8 @@ package eu.epitech.java;
  *
  */
 
-import eu.epitech.java.modules.Module;
-import eu.epitech.java.modules.ModuleRepository;
+import eu.epitech.java.entities.modules.TestModule;
+import eu.epitech.java.lists.ModuleList;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -20,8 +20,9 @@ public class App {
 
         ConfigurableApplicationContext context = SpringApplication.run(App.class, args);
         //test
-        ModuleRepository repo = context.getBean(ModuleRepository.class);
-        repo.save(new Module());
+        ModuleList repo = context.getBean(ModuleList.class);
+        repo.save(new TestModule());
         System.out.println(repo.count());
+        System.out.println(repo.findAll().get(0).getName());
     }
 }
