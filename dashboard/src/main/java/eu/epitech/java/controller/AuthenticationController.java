@@ -1,14 +1,12 @@
 package eu.epitech.java.controller;
 
-import org.omg.Messaging.SYNC_WITH_TRANSPORT;
+import eu.epitech.java.lists.UserList;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 @RestController
 public class AuthenticationController {
@@ -39,5 +37,20 @@ public class AuthenticationController {
     public String getUser(@PathVariable(value = "userID") String id)
     {
         return ("user id  = " + id + ".");
+    }
+
+    @Autowired
+    String testSingleTon;
+
+    @Autowired
+    UserList UserList;
+    
+    @RequestMapping("/home")
+    public String getHome() {
+
+        System.out.println("===========================");
+        System.out.println(testSingleTon);
+        System.out.println(UserList.count());
+        return "";
     }
 }
