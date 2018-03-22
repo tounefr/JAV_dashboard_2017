@@ -10,6 +10,7 @@ import org.springframework.social.twitter.api.CursoredList;
 import org.springframework.social.twitter.api.Twitter;
 import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.cache.annotation.Cacheable;
 
 import java.util.List;
 
@@ -28,6 +29,7 @@ public class TwitterController
 
     @CrossOrigin(origins = "http://localhost:4200")
     @RequestMapping(value = "/twitter/friends")
+    @Cacheable("twitter.friends")
     public CursoredList<TwitterProfile> getFriends()
     {
         return twitter.friendOperations().getFriends();
@@ -35,6 +37,7 @@ public class TwitterController
 
     @CrossOrigin(origins = "http://localhost:4200")
     @RequestMapping(value = "/twitter/my-tweets")
+    @Cacheable("twitter.mytweets")
     public List<Tweet> getMyTweets()
     {
         return twitter.timelineOperations().getHomeTimeline();
@@ -42,6 +45,7 @@ public class TwitterController
 
     @CrossOrigin(origins = "http://localhost:4200")
     @RequestMapping(value = "/twitter/mentions")
+    @Cacheable("twitter.mentions")
     public List<Tweet> getMentions()
     {
         return twitter.timelineOperations().getMentions();
@@ -49,7 +53,8 @@ public class TwitterController
 
     @CrossOrigin(origins = "http://localhost:4200")
     @RequestMapping(value = "/twitter/followers", method = RequestMethod.GET)
-    public CursoredList<TwitterProfile>  getTwitter()
+    @Cacheable("twitter.followers")
+    public CursoredList<TwitterProfile> getFollowers()
     {
         return twitter.friendOperations().getFollowers();
     }
