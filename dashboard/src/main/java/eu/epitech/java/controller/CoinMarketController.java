@@ -1,7 +1,5 @@
 package eu.epitech.java.controller;
 
-/* je sais je ne respecte pas la mvc que t'as mis en place, c'est juste un démonstrateur car il est 4h du mat xD */
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -1,0 +1,17 @@
+<html xmlns:th="http://www.thymeleaf.org">
+
+<form action="/login" method="post" class="form-horizontal">
+  username:<br></br>
+  <input type="text" name="username"></input><br></br>
+  pass:<br></br>
+  <input type="password" name="password"></input>
+  <button type="submit">send</button>
+  <input type="hidden" name="${_csrf.parameterName}"
+         value="${_csrf.token}" />
+</form>
+
+  <body>
+    Bonjour login
+
+  </body>
+</html>
