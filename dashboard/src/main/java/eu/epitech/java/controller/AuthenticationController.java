@@ -1,12 +1,16 @@
 package eu.epitech.java.controller;
 
+import eu.epitech.java.entities.Module;
 import eu.epitech.java.lists.UserList;
+import eu.epitech.java.lists.ModuleList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 public class AuthenticationController {
@@ -44,13 +48,22 @@ public class AuthenticationController {
 
     @Autowired
     UserList UserList;
+
+    @Autowired
+    ModuleList ModuleList;
     
-    @RequestMapping("/home")
-    public String getHome() {
+    @RequestMapping("/modules")
+    public String getModuleList() {
 
         System.out.println("===========================");
         System.out.println(testSingleTon);
         System.out.println(UserList.count());
-        return "";
+        String res= "";
+        res += "Here is a list of available modules:<br>";
+        List<Module> list = ModuleList.findAll();
+        for (Module current : list) {
+            res += "-" + current.getName() + "<br>";
+        }
+        return res;
     }
 }

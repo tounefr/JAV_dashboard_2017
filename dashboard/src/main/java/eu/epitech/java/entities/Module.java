@@ -19,6 +19,8 @@ public abstract class Module implements Serializable{
     @Column(name = "name")
     private String name;
 
+    private Integer refresh;
+
     public Module(String _name)
     {
         this.name = _name;
