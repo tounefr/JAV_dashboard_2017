@@ -1,5 +1,6 @@
 package eu.epitech.java.controller;
 
+import eu.epitech.java.api.Twitter.Stats;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.twitter.api.Tweet;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -57,6 +58,19 @@ public class TwitterController
     public CursoredList<TwitterProfile> getFollowers()
     {
         return twitter.friendOperations().getFollowers();
+    }
+
+    @CrossOrigin(origins = "http://localhost:4200")
+    @RequestMapping(value = "/twitter/stats", method = RequestMethod.GET)
+    @Cacheable("twitter.stats.followers")
+    public Stats getStats()
+    {
+        TwitterProfile profile = twitter.userOperations().getUserProfile();
+        Stats stats = new Stats();
+        stats.setFollowers(profile.getFollowersCount());
+        stats.setFriends(profile.getFriendsCount());
+        stats.setStatus(profile.getStatusesCount());
+        return stats;
     }
 
 }
