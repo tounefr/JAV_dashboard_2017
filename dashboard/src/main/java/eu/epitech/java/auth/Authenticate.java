@@ -27,9 +27,9 @@ public class Authenticate extends WebSecurityConfigurerAdapter {
                 .formLogin().loginPage("/login").failureUrl("/login-error")
                 .and()
                 .authorizeRequests()
-                    .antMatchers("/login**", "/css/**", "/error", "/h2admin/**").permitAll()
-                    //.antMatchers("/admin/**").hasRole("ADMIN")
-                    .antMatchers("/**").hasRole("USER")
+                .antMatchers("/login**", "/css/**", "/error", "/h2admin/**").permitAll()
+                //.antMatchers("/admin/**").hasRole("ADMIN")
+                //.antMatchers("/**").hasRole("USER")
                 .and()
                 .logout().logoutUrl("/logout")
                 ;
