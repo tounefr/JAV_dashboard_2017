@@ -28,7 +28,7 @@ public class App {
         return new WebMvcConfigurerAdapter() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**").allowedMethods("*").allowedOrigins("http://dashboard.epitech.eu");
+                registry.addMapping("/**").allowedMethods("*").allowedOrigins("*");
             }
         };
     }
@@ -39,6 +39,7 @@ public class App {
         ConfigurableApplicationContext context = SpringApplication.run(App.class, args);
         //test
         ModuleList repo = context.getBean(ModuleList.class);
+        repo.deleteAll();
         repo.save(new TestModule());
         System.out.println(repo.count());
         System.out.println(repo.findAll().get(0).getName());

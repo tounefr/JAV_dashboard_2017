@@ -74,7 +74,7 @@ public class UserListHandler {
         @Override
         public Collection<? extends GrantedAuthority> getAuthorities() {
             List<UserRole> roles = new ArrayList<UserRole>();
-            roles.add((user.isAdmin()) ? new UserRole("ADMIN") : new UserRole("USER"));
+            roles.add((user.isAdmin()) ? new UserRole("ROLE_ADMIN") : new UserRole("ROLE_USER"));
             return roles;
         }
 
