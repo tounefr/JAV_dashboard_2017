@@ -2,3 +2,4 @@
 dashboard/*.log
 dashboard/target
 *.db
+node_modules/

@@ -1,0 +1,113 @@
+
+<ng-template #loading>Loading...</ng-template>
+
+<div *ngIf="serviceActivated" class="panel panel-primary">
+  <div class="panel-heading">
+    <h3 class="panel-title">
+      <div class="row">
+        <div class="col-md-6"><span class="glyphicon glyphicon-th-large"></span> Twitter</div>
+        <div class="col-md-6 text-right">
+          <span class="glyphicon glyphicon-refresh" (click)="refresh()" title="Rafraichir" style="cursor: pointer;"></span>
+          <span class="glyphicon glyphicon-remove" title="Se déconnecter" style="cursor: pointer;"></span>
+        </div>
+      </div>
+    </h3>
+  </div>
+  <div class="panel-body">
+
+    <div *ngIf="!serviceConnected">
+      <form method="POST" action="http://localhost:8080/connect/twitter">
+        <button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-user"></span> Se connecter</button>
+      </form>
+    </div>
+
+    <div *ngIf="serviceConnected">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="panel panel-info">
+            <div class="panel-heading">
+              <h3 class="panel-title"><span class="glyphicon glyphicon-stats"></span> Stats</h3>
+            </div>
+            <div class="panel-body" *ngIf="stats | async; let stats; else loading" style="text-align: center">
+              <div class="col-md-4">
+                <h3>Tweets</h3>
+                <p>{{stats.status}}</p>
+              </div>
+              <div class="col-md-4">
+                <h3>Followers</h3>
+                <p>{{stats.followers}}</p>
+              </div>
+              <div class="col-md-4">
+                <h3>Subscriptions</h3>
+                <p>{{stats.friends}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="panel panel-info">
+            <div class="panel-heading">
+              <h3 class="panel-title"><span class="glyphicon glyphicon-comment"></span> Timeline</h3>
+            </div>
+            <div class="panel-body" *ngIf="tweets | async; let tweets; else loading" style="max-height: 250px; overflow: auto">
+              <table class="table table-condensed table-striped">
+                <tr>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                </tr>
+                <tr *ngFor="let tweet of tweets">
+                  <td>{{tweet.createdAt|date}}</td>
+                  <td>{{tweet.fromUser}}</td>
+                  <td>{{tweet.text}}</td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="panel panel-info">
+            <div class="panel-heading">
+              <h3 class="panel-title"><span class="glyphicon glyphicon-heart"></span> Last mentions</h3>
+            </div>
+            <div class="panel-body" *ngIf="mentions | async; let mentions; else loading" style="max-height: 250px; overflow: auto">
+              <table class="table table-condensed table-striped">
+                <tr>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                </tr>
+                <tr *ngFor="let mention of mentions">
+                  <td>{{mention.createdAt|date}}</td>
+                  <td>{{mention.fromUser}}</td>
+                  <td>{{mention.text}}</td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="panel panel-info">
+            <div class="panel-heading">
+              <h3 class="panel-title"><span class="glyphicon glyphicon-eye-open"></span> Last follows</h3>
+            </div>
+            <div class="panel-body" *ngIf="followers | async; let followers; else loading" style="max-height: 250px; overflow: auto">
+              <table class="table table-condensed table-striped">
+                <tr>
+                  <th></th>
+                </tr>
+                <tr *ngFor="let follower of followers">
+                  <td>{{follower.name}}</td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

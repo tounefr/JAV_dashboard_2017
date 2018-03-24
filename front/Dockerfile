@@ -1,5 +1,5 @@
 FROM node:latest
-WORKDIR /app/dashboard
+WORKDIR /app
 CMD npm i && \
     npm run-script build && \
     npm run-script start-prod

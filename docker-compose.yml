@@ -3,7 +3,7 @@ services:
   front:
     build: ./front 
     volumes:
-      - ./front/dashboard:/app
+      - ./front:/app
     ports:
       - 4200:4200
   front-dev:
@@ -11,6 +11,6 @@ services:
       context: ./front
       dockerfile: Dockerfile.dev
     volumes:
-      - ./front/dashboard:/app
+      - ./front:/app
     ports:
       - 4200:4200
