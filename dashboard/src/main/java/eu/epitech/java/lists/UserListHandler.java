@@ -2,10 +2,16 @@ package eu.epitech.java.lists;
 
 import eu.epitech.java.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+
 
 @Component
 public class UserListHandler {
@@ -43,5 +49,84 @@ public class UserListHandler {
         public UHLException(String what) {
             super(what);
         }
+    }
+
+    /* Pour avoir une authentification spring des users à partir de la DB, et runtime compliant */
+
+    public class UserRole implements GrantedAuthority {
+        String role;
+        public UserRole(final String _role) {
+            this.role = _role;
+        }
+        @Override
+        public String getAuthority() {
+            return this.role;
+        }
+    }
+
+    public class UserPrincipal implements UserDetails {
+        private User user;
+
+        public UserPrincipal(User _user) {
+            this.user = _user;
+        }
+
+        @Override
+        public Collection<? extends GrantedAuthority> getAuthorities() {
+            List<UserRole> roles = new ArrayList<UserRole>();
+            roles.add((user.isAdmin()) ? new UserRole("ADMIN") : new UserRole("USER"));
+            return roles;
+        }
+
+        @Override
+        public String getPassword() {
+            return user.getPassword();
+        }
+
+        @Override
+        public String getUsername() {
+            return user.getUsername();
+        }
+
+        @Override
+        public boolean isAccountNonExpired() {
+            return true;
+        }
+
+        @Override
+        public boolean isAccountNonLocked() {
+            return true;
+        }
+
+        @Override
+        public boolean isCredentialsNonExpired() {
+            return true;
+        }
+
+        @Override
+        public boolean isEnabled()
+        {
+            return true;
+        }
+    }
+
+    private class DBUserDetailsService implements UserDetailsService {
+        @Override
+        public UserDetails loadUserByUsername(final String username) {
+            User target = getUser(username);
+            if (target == null) {
+                throw new UsernameNotFoundException(username);
+            }
+            return new UserPrincipal(target);
+        }
+
+    }
+
+    // pas déclaré de manière conventionnelle (en haut), car cas particulier
+    private DBUserDetailsService UserDetails = new DBUserDetailsService();
+
+    public DBUserDetailsService getUserDetails()
+    {
+        return this.UserDetails;
     }
 }

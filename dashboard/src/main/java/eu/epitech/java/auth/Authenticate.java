@@ -1,8 +1,10 @@
 package eu.epitech.java.auth;
 
 import eu.epitech.java.entities.User;
+import eu.epitech.java.lists.UserList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -44,13 +46,25 @@ public class Authenticate extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserListHandler UserListHandler;
 
+
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        System.out.println(UserListHandler.getUserDetails());
+        authProvider.setUserDetailsService(UserListHandler.getUserDetails());
+        return authProvider;
+    }
+    
+
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        /*
         List<User> users = UserListHandler.getUsers();
         for (User current : users) {
             auth.inMemoryAuthentication().withUser(current.getUsername()).password(current.getPassword())
                     .roles((current.isAdmin()) ? "ADMIN" : "USER");
         }
-        //auth.inMemoryAuthentication().withUser("user").password("password").roles("USER");
+        */
+        auth.authenticationProvider(authenticationProvider());
     }
 }
