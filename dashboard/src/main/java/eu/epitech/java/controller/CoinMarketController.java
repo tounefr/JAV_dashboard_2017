@@ -17,7 +17,6 @@ public class CoinMarketController
     }
 
     @RequestMapping(value = "/coinmarket", params = "currency", method = RequestMethod.GET)
-    @CrossOrigin(origins = "http://localhost:4200")
     @Cacheable("coinmarketcap.currency")
     public Double getCoinmarket(@RequestParam("currency") String currency)
     {

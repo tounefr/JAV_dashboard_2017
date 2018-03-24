@@ -1,0 +1,18 @@
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    <h3 class="panel-title"><span class="glyphicon glyphicon-th-large"></span> Preferences</h3>
+  </div>
+  <div class="panel-body">
+    <div *ngFor="let service of services">
+
+      <div class="pretty p-default ">
+        <input [(ngModel)]="service.serviceActivated" (change)="savePrefs()" type="checkbox" />
+        <div class="state">
+          <label>{{service.serviceName}}</label>
+        </div>
+      </div>
+
+    </div>
+    <!--<button type="button" (click)="savePrefs()" class="btn btn-info">Save</button>-->
+  </div>
+</div>

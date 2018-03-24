@@ -5,17 +5,15 @@ import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.social.facebook.api.Facebook;
 import org.springframework.social.facebook.api.PagedList;
 import org.springframework.social.facebook.api.Reference;
+import org.springframework.social.twitter.api.Twitter;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.social.facebook.api.User;
+import org.springframework.social.facebook.api.Post;
 
 @RestController
 public class FacebookController
 {
-
     private Facebook facebook;
     private ConnectionRepository connectionRepository;
 
@@ -32,9 +30,30 @@ public class FacebookController
         return facebook.userOperations().getUserProfile();
     }
 
+    @RequestMapping(value = "/facebook/feed-posts", method = RequestMethod.GET)
+    public PagedList<Post> getFeedPosts() {
+        return facebook.feedOperations().getHomeFeed();
+    }
+
+    @RequestMapping(value = "/facebook/status", method = RequestMethod.GET)
+    public PagedList<Post> getStatus() {
+        return facebook.feedOperations().getStatuses();
+    }
+
+    @RequestMapping(value = "/facebook/mentions", method = RequestMethod.GET)
+    public PagedList<Post> getMentions() {
+        return facebook.feedOperations().getTagged();
+    }
+
     @RequestMapping(value = "/facebook/friends", method = RequestMethod.GET)
     public PagedList<Reference> getFriends()
     {
         return facebook.friendOperations().getFriends();
+    }
+
+    @RequestMapping(value = "/facebook/connected", method = RequestMethod.GET)
+    public boolean isConnected()
+    {
+        return connectionRepository.findPrimaryConnection(Facebook.class) != null;
     }
 }

@@ -1,5 +1,5 @@
 .idea
 dashboard/*.log
-.git
 dashboard/target
+*.db
 node_modules/
