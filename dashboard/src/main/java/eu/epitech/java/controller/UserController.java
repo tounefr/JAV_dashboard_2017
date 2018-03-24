@@ -18,8 +18,6 @@ public class UserController {
     private UserListHandler UserListHandler;
     
     private boolean canAccess(HttpServletRequest req, final String target) {
-        System.out.println("PBEUUU:");
-        System.out.println(req.getUserPrincipal().toString());
         if ((target != null && target.equals(req.getUserPrincipal().getName())) || req.isUserInRole("ADMIN"))
             return true;
         return false;
@@ -58,9 +56,9 @@ public class UserController {
     @ResponseBody
     public String getUsers(HttpServletRequest req)
     {
-        if (!this.canAccess(req, null))
-            return GenericResponse.error(GenericResponse.buildErrorPLY(401,
-                    "Unauthorized", "This action requires elevated privileges"), req.getRequestURI());
+    //    if (!this.canAccess(req, null))
+    //        return GenericResponse.error(GenericResponse.buildErrorPLY(401,
+    //                "Unauthorized", "This action requires elevated privileges"), req.getRequestURI());
         String res= "";
         res += "Here is a list of available users:<br>";
         List<User> list = UserListHandler.getUsers();
@@ -69,7 +67,7 @@ public class UserController {
         }
 
         return GenericResponse.success(GenericResponse.buildSuccessPLY(
-                res), req.getRequestURI());
+                list), req.getRequestURI());
     }
 
     @RequestMapping("/users/{userID}")

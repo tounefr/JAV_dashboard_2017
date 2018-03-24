@@ -34,8 +34,8 @@ public class Authenticate extends WebSecurityConfigurerAdapter {
                 //.and()
                 .authorizeRequests()
                 .antMatchers("/login**", "/users/register", "/css/**", "/error", "/h2admin/**").permitAll()
-            //    .antMatchers("/admin/**").hasRole("ADMIN")
-            //    .antMatchers("/**").hasRole("USER")
+                .antMatchers("/admin/**").hasRole("ADMIN")
+                .antMatchers("/**").hasRole("USER")
                 .and()
                 .logout().logoutUrl("/logout")
                 ;
