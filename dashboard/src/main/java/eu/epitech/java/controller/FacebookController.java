@@ -1,6 +1,7 @@
 package eu.epitech.java.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.social.facebook.api.Facebook;
 import org.springframework.social.facebook.api.PagedList;
@@ -24,6 +25,7 @@ public class FacebookController
         this.connectionRepository = connectionRepository;
     }
 
+    @Cacheable("facebook.profile")
     @RequestMapping(value = "/facebook/profile", method = RequestMethod.GET)
     public User getProfile()
     {
@@ -32,9 +34,9 @@ public class FacebookController
 
     @RequestMapping(value = "/facebook/feed-posts", method = RequestMethod.GET)
     public PagedList<Post> getFeedPosts() {
-        return facebook.feedOperations().getHomeFeed();
+        return facebook.feedOperations().getFeed();
     }
-
+    
     @RequestMapping(value = "/facebook/status", method = RequestMethod.GET)
     public PagedList<Post> getStatus() {
         return facebook.feedOperations().getStatuses();

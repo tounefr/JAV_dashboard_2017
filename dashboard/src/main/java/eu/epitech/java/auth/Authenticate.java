@@ -40,7 +40,7 @@ public class Authenticate extends WebSecurityConfigurerAdapter {
                 .logout().logoutUrl("/logout")
                 ;
         http.csrf().disable(); // on est en localhost
-        http.headers().frameOptions().sameOrigin(); // autoriser les frames pour h2console (h2admin)
+        //http.headers().frameOptions().sameOrigin(); // autoriser les frames pour h2console (h2admin)
     }
 
     @Autowired

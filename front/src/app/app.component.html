@@ -23,7 +23,7 @@
 <div class="container-fluid">
 
   <div class="starter-template">
-    <div *ngFor="let alert of alerts">
+    <div *ngFor="let alert of alertService.alerts">
       <alert [type]="alert.type"><span [innerHtml]="alert.msg"></span></alert>
     </div>
 

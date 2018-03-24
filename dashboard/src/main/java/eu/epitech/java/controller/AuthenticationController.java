@@ -16,16 +16,17 @@ import java.util.List;
 public class AuthenticationController {
 
     @RequestMapping("/login")
+    @ResponseBody
     @ModelAttribute //FIXME c'est juste pour afficher la view pour debug sans angular mais il faut enlever l'annotation pour passer en mode rest
     public String loginPage () {
         if (SecurityContextHolder.getContext().getAuthentication().getPrincipal() != null) {
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             if (!(auth instanceof AnonymousAuthenticationToken)) {
                 System.out.println("ALREADY LOGGED IN");
-                return "/"; // TODO ici à cause du ModelAttribute ça redirect pas, mais ici faut redirect l'user car déjà authentifié :)
+                //return "/"; // TODO ici à cause du ModelAttribute ça redirect pas, mais ici faut redirect l'user car déjà authentifié :)
             }
         }
-        return "login";
+        return "success";
     }
 
     @RequestMapping("/login-error")
