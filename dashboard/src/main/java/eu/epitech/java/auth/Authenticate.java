@@ -1,5 +1,6 @@
 package eu.epitech.java.auth;
 
+import eu.epitech.java.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -8,6 +9,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import eu.epitech.java.lists.UserListHandler;
+
+import java.util.List;
 
 @EnableWebSecurity
 public class Authenticate extends WebSecurityConfigurerAdapter {
@@ -38,7 +42,15 @@ public class Authenticate extends WebSecurityConfigurerAdapter {
     }
 
     @Autowired
+    private UserListHandler UserListHandler;
+
+    @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication().withUser("user").password("password").roles("USER");
+        List<User> users = UserListHandler.getUsers();
+        for (User current : users) {
+            auth.inMemoryAuthentication().withUser(current.getUsername()).password(current.getPassword())
+                    .roles((current.isAdmin()) ? "ADMIN" : "USER");
+        }
+        //auth.inMemoryAuthentication().withUser("user").password("password").roles("USER");
     }
 }

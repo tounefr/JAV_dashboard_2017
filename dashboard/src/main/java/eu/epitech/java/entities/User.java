@@ -51,6 +51,9 @@ public class User implements Serializable {
     public String getUsername() {
         return this.username;
     }
+    public String getPassword() {
+        return this.password;
+    }
     public boolean checkPass(final String _password) {
         return this.password.equals(_password);
     }
