@@ -23,6 +23,10 @@ public class UserController {
         return false;
     }
 
+    private String errorElevated(final HttpServletRequest req) {
+        return GenericResponse.error(GenericResponse.buildErrorPLY(401,
+                "Unauthorized", "This action requires elevated privileges"), req.getRequestURI());
+    }
 
     static private class UserPLY {
         public String username;
@@ -56,15 +60,10 @@ public class UserController {
     @ResponseBody
     public String getUsers(HttpServletRequest req)
     {
-    //    if (!this.canAccess(req, null))
-    //        return GenericResponse.error(GenericResponse.buildErrorPLY(401,
-    //                "Unauthorized", "This action requires elevated privileges"), req.getRequestURI());
-        String res= "";
-        res += "Here is a list of available users:<br>";
+        if (!this.canAccess(req, null))
+            return errorElevated(req);
+
         List<User> list = UserListHandler.getUsers();
-        for (User current : list) {
-            res += "-" + current.getUsername() + "<br>";
-        }
 
         return GenericResponse.success(GenericResponse.buildSuccessPLY(
                 list), req.getRequestURI());
@@ -75,15 +74,15 @@ public class UserController {
     public String getUser(HttpServletRequest req, @PathVariable(value = "userID") String id)
     {
         if (!this.canAccess(req, id))
-            return GenericResponse.error(GenericResponse.buildErrorPLY(401,
-                    "Unauthorized", "This action requires elevated privileges"), req.getRequestURI());
+            return errorElevated(req);
+
         User target = UserListHandler.getUser(id);
         if (target == null)
             return GenericResponse.error(GenericResponse.buildErrorPLY(400,
                     "Bad request", "User not found"), req.getRequestURI());
 
         return GenericResponse.success(GenericResponse.buildSuccessPLY(
-                "k user found"), req.getRequestURI());
+                target), req.getRequestURI());
     }
 
     @RequestMapping("/users/{userID}/modules")
@@ -91,8 +90,8 @@ public class UserController {
     public String getUserModules(HttpServletRequest req, @PathVariable(value = "userID") String id)
     {
         if (!this.canAccess(req, id))
-            return GenericResponse.error(GenericResponse.buildErrorPLY(401,
-                    "Unauthorized", "This action requires elevated privileges"), req.getRequestURI());
+            return errorElevated(req);
+
         User target = UserListHandler.getUser(id);
         if (target == null)
             return GenericResponse.error(GenericResponse.buildErrorPLY(400,
@@ -104,7 +103,7 @@ public class UserController {
             res += "-" + current.getName() + "<br>";
         }
         return GenericResponse.success(GenericResponse.buildSuccessPLY(
-                res), req.getRequestURI());
+                modules), req.getRequestURI());
     }
 
     @RequestMapping("/users/{userID}/modules/{moduleID}")
@@ -114,8 +113,8 @@ public class UserController {
                                 @PathVariable(value = "moduleID") String module)
     {
         if (!this.canAccess(req, id))
-            return GenericResponse.error(GenericResponse.buildErrorPLY(401,
-                    "Unauthorized", "This action requires elevated privileges"), req.getRequestURI());
+            return errorElevated(req);
+
         User target = UserListHandler.getUser(id);
         if (target == null)
             return GenericResponse.error(GenericResponse.buildErrorPLY(400,
@@ -144,8 +143,8 @@ public class UserController {
                                 @PathVariable(value = "moduleID") String module)
     {
         if (!this.canAccess(req, id))
-            return GenericResponse.error(GenericResponse.buildErrorPLY(401,
-                    "Unauthorized", "This action requires elevated privileges"), req.getRequestURI());
+            return errorElevated(req);
+
         User target = UserListHandler.getUser(id);
         if (target == null)
             return GenericResponse.error(GenericResponse.buildErrorPLY(400,
@@ -167,16 +166,5 @@ public class UserController {
                     "unable to subscribe to module: " + tmodule.getName()), req.getRequestURI());
         return GenericResponse.success(GenericResponse.buildSuccessPLY(
                 "successfully subscribed to the module: " + tmodule.getName()), req.getRequestURI());
-    }
-
-    public class test {
-        public String name = "yes";
-    }
-
-    @RequestMapping("/test")
-    @ResponseBody
-    public String test() {
-        String succ = GenericResponse.success(GenericResponse.buildSuccessPLY(new test()), "/");
-        return succ;
     }
 }
