@@ -16,7 +16,7 @@
   <div class="panel-body">
 
     <div *ngIf="!serviceConnected">
-      <form method="POST" action="http://localhost:8080/connect/twitter">
+      <form ngNoForm method="POST" action="http://localhost:8080/connect/twitter">
         <button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-user"></span> Se connecter</button>
       </form>
     </div>

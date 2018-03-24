@@ -8,13 +8,14 @@ import { catchError, map, tap } from 'rxjs/operators';
 import { Stats } from './twitter/stats'
 import { Tweet } from './twitter/tweet'
 import { Profile } from './twitter/profile'
+import {Profile as FacebookProfile} from './facebook/profile'
 
 import { Currency } from './coinmarketcap/currency'
 
 @Injectable()
 export class RequesterService {
 
-  endpointUrl = 'http://localhost:8080/';
+  endpointUrl = 'http://dashboard.epitech.eu:8080/';
 
   constructor(private http: HttpClient) { }
 
@@ -42,7 +43,15 @@ export class RequesterService {
     return this.http.get<boolean>(this.endpointUrl + 'twitter/connected')
   }
 
+  facebookCheckConnected(): Observable<boolean> {
+    return this.http.get<boolean>(this.endpointUrl + 'facebook/connected')
+  }
+
   loginRequest(username: string, password: string): Observable<boolean>{
-    return this.http.get<boolean>(this.endpointUrl + 'account')
+    return this.http.get<boolean>(this.endpointUrl + 'login')
+  }
+
+  getFacebookProfile(): Observable<FacebookProfile> {
+    return this.http.get<FacebookProfile>(this.endpointUrl + 'facebook/profile')
   }
 }

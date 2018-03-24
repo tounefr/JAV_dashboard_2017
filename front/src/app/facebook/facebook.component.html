@@ -16,13 +16,33 @@
   <div class="panel-body">
 
     <div *ngIf="!serviceConnected">
-      <form method="POST" action="{{serviceConnectUrl}}">
+      <form ngNoForm method="POST" action="{{serviceConnectUrl}}">
+        <input type="hidden" name="scope" value="user_likes,public_profile,user_posts,user_friends,user_about_me,publish_actions" />
         <button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-user"></span> Se connecter
         </button>
       </form>
     </div>
 
-  </div>
+    <div *ngIf="serviceConnected">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="panel panel-info">
+            <div class="panel-heading">
+              <h3 class="panel-title"><span class="glyphicon glyphicon-user"></span> About</h3>
+            </div>
+            <div class="panel-body" *ngIf="profile | async; let profile; else loading" style="text-align: center">
+              <div class="col-md-12">
+                <h4>Connected as</h4>
+                <h3>{{profile.firstName}} {{profile.lastName}}</h3>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    </div>
 </div>
 
 

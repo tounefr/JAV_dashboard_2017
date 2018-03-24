@@ -5,7 +5,7 @@
   "scripts": {
     "ng": "ng",
     "start": "node server.js",
-    "start-dev": "ng serve --host 0.0.0.0 -w",
+    "start-dev": "ng serve --host 0.0.0.0 --disable-host-check -w",
     "start-prod": "node server.js",
     "build": "ng build --prod",
     "test": "ng test",

@@ -20,7 +20,7 @@ export class TwitterComponent extends AService implements OnInit {
   followers: Observable<Profile[]>;
 
   constructor(private requester: RequesterService) {
-    super('Twitter', 'http://localhost:8080/connect/twitter')
+    super('Twitter', 'http://dashboard.epitech.eu:8080/connect/twitter')
     this.tweets = null
     this.stats = null
     this.mentions = null

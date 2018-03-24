@@ -27,8 +27,6 @@ public class TwitterController
         this.twitter = twitter;
         this.connectionRepository = connectionRepository;
     }
-
-    @CrossOrigin(origins = "http://localhost:4200")
     @RequestMapping(value = "/twitter/friends")
     @Cacheable("twitter.friends")
     public CursoredList<TwitterProfile> getFriends()
@@ -36,7 +34,6 @@ public class TwitterController
         return twitter.friendOperations().getFriends();
     }
 
-    @CrossOrigin(origins = "http://localhost:4200")
     @RequestMapping(value = "/twitter/my-tweets")
     @Cacheable("twitter.mytweets")
     public List<Tweet> getMyTweets()
@@ -44,7 +41,6 @@ public class TwitterController
         return twitter.timelineOperations().getHomeTimeline();
     }
 
-    @CrossOrigin(origins = "http://localhost:4200")
     @RequestMapping(value = "/twitter/mentions")
     @Cacheable("twitter.mentions")
     public List<Tweet> getMentions()
@@ -52,7 +48,12 @@ public class TwitterController
         return twitter.timelineOperations().getMentions();
     }
 
-    @CrossOrigin(origins = "http://localhost:4200")
+    @RequestMapping(value = "/twitter/connected", method = RequestMethod.GET)
+    public boolean isConnected()
+    {
+        return connectionRepository.findPrimaryConnection(Twitter.class) != null;
+    }
+
     @RequestMapping(value = "/twitter/followers", method = RequestMethod.GET)
     @Cacheable("twitter.followers")
     public CursoredList<TwitterProfile> getFollowers()
@@ -60,7 +61,6 @@ public class TwitterController
         return twitter.friendOperations().getFollowers();
     }
 
-    @CrossOrigin(origins = "http://localhost:4200")
     @RequestMapping(value = "/twitter/stats", method = RequestMethod.GET)
     @Cacheable("twitter.stats.followers")
     public Stats getStats()
