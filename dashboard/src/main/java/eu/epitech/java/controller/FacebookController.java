@@ -36,7 +36,7 @@ public class FacebookController
     public PagedList<Post> getFeedPosts() {
         return facebook.feedOperations().getFeed();
     }
-    
+
     @RequestMapping(value = "/facebook/status", method = RequestMethod.GET)
     public PagedList<Post> getStatus() {
         return facebook.feedOperations().getStatuses();
@@ -48,9 +48,9 @@ public class FacebookController
     }
 
     @RequestMapping(value = "/facebook/friends", method = RequestMethod.GET)
-    public PagedList<Reference> getFriends()
+    public PagedList<User> getFriends()
     {
-        return facebook.friendOperations().getFriends();
+        return facebook.friendOperations().getFriendProfiles();
     }
 
     @RequestMapping(value = "/facebook/connected", method = RequestMethod.GET)

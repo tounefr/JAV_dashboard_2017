@@ -53,6 +53,10 @@ public class AuthFilter extends UsernamePasswordAuthenticationFilter {
         } catch (IOException ex) {
             System.out.println(ERROR_MSG);
             throw new InternalAuthenticationServiceException(ERROR_MSG, ex);
+        } catch (IllegalStateException ex) {
+            System.out.println(ERROR_MSG);
+            return null;
+            //throw new InternalAuthenticationServiceException(ERROR_MSG, ex);
         }
     }
 }

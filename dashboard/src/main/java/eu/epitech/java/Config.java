@@ -1,5 +1,7 @@
 package eu.epitech.java;
 
+import eu.epitech.java.lists.ModuleListHandler;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -34,4 +36,12 @@ public class Config {
 
     public Config() {
     }
+
+    /*
+    @Autowired
+    ModuleListHandler ModuleListHandler;
+    public void loadModules() {
+        
+    }
+    */
 }

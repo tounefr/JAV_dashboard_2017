@@ -1,32 +1,27 @@
 package eu.epitech.java.controller;
 
-import eu.epitech.java.entities.Module;
-import eu.epitech.java.lists.UserList;
-import eu.epitech.java.lists.ModuleList;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @RestController
 public class AuthenticationController {
 
     @RequestMapping("/login")
-    @ResponseBody
-    @ModelAttribute //FIXME c'est juste pour afficher la view pour debug sans angular mais il faut enlever l'annotation pour passer en mode rest
-    public String loginPage () {
+    public String loginPage (HttpServletRequest req, HttpServletResponse res) {
         if (SecurityContextHolder.getContext().getAuthentication().getPrincipal() != null) {
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             if (!(auth instanceof AnonymousAuthenticationToken)) {
                 System.out.println("ALREADY LOGGED IN");
-                //return "/"; // TODO ici à cause du ModelAttribute ça redirect pas, mais ici faut redirect l'user car déjà authentifié :)
+                res.setHeader("Location:", req.getHeader("referer"));
+                return null;
             }
         }
-        return "success";
+        return null;
     }
 
     @RequestMapping("/login-error")
@@ -42,29 +37,5 @@ public class AuthenticationController {
     public String getUser(@PathVariable(value = "userID") String id)
     {
         return ("user id  = " + id + ".");
-    }
-
-    @Autowired
-    String testSingleTon;
-
-    @Autowired
-    UserList UserList;
-
-    @Autowired
-    ModuleList ModuleList;
-    
-    @RequestMapping("/modules")
-    public String getModuleList() {
-
-        System.out.println("===========================");
-        System.out.println(testSingleTon);
-        System.out.println(UserList.count());
-        String res= "";
-        res += "Here is a list of available modules:<br>";
-        List<Module> list = ModuleList.findAll();
-        for (Module current : list) {
-            res += "-" + current.getName() + "<br>";
-        }
-        return res;
     }
 }

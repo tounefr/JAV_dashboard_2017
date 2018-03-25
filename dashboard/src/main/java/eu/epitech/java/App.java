@@ -42,6 +42,7 @@ public class App {
         ConfigurableApplicationContext context = SpringApplication.run(App.class, args);
         //test
         ModuleList repo = context.getBean(ModuleList.class);
+        repo.deleteAll();
         repo.save(new TestModule());
         System.out.println(repo.count());
         System.out.println(repo.findAll().get(0).getName());

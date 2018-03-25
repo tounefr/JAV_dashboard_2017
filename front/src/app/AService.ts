@@ -1,5 +1,6 @@
+import { Input } from '@angular/core';
 
-export abstract class AService {
+export class AService {
 
   serviceName: string;
   serviceActivated: boolean;

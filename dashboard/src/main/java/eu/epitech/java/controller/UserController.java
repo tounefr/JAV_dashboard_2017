@@ -1,5 +1,6 @@
 package eu.epitech.java.controller;
 
+import eu.epitech.java.controller.rest.GenericResponse;
 import eu.epitech.java.entities.Module;
 import eu.epitech.java.entities.User;
 import eu.epitech.java.lists.UserListHandler;
@@ -22,6 +23,10 @@ public class UserController {
         return false;
     }
 
+    private String errorElevated(final HttpServletRequest req) {
+        return GenericResponse.error(GenericResponse.buildErrorPLY(401,
+                "Unauthorized", "This action requires elevated privileges"), req.getRequestURI());
+    }
 
     static private class UserPLY {
         public String username;
@@ -38,37 +43,30 @@ public class UserController {
         System.out.println(payload.username);
         try {
             if (payload.username == null || payload.password == null) {
-                return "invalid payload";
+                return GenericResponse.error(GenericResponse.buildErrorPLY(400,
+                        "Bad request", "Invalid payload"), req.getRequestURI());
             }
             UserListHandler.addUser(payload.username, payload.password, false);
         } catch (UserListHandler.UHLException e) {
-            return "error: " + e.getMessage();
+            return GenericResponse.error(GenericResponse.buildErrorPLY(503,
+                    "Unknown error", "\"error: \" + e.getMessage()"), req.getRequestURI());
         }
 
-        return "successfully created user " + payload.username;
+        return GenericResponse.success(GenericResponse.buildSuccessPLY(
+                "successfully created user " + payload.username), req.getRequestURI());
     }
-    
-    //@RequestMapping("/users/{userID}/modules")
+
     @RequestMapping("/users")
     @ResponseBody
-    //public String getUserModules(@PathVariable(value = "userID") String id)
     public String getUsers(HttpServletRequest req)
     {
         if (!this.canAccess(req, null))
-            return "this action requires elevated privileges";
-/*        try {
-            
-        } catch (UserListHandler.UHLException e) {
+            return errorElevated(req);
 
-        } */
-        String res= "";
-        res += "Here is a list of available users:<br>";
         List<User> list = UserListHandler.getUsers();
-        for (User current : list) {
-            res += "-" + current.getUsername() + "<br>";
-        }
 
-        return res;
+        return GenericResponse.success(GenericResponse.buildSuccessPLY(
+                list), req.getRequestURI());
     }
 
     @RequestMapping("/users/{userID}")
@@ -76,11 +74,15 @@ public class UserController {
     public String getUser(HttpServletRequest req, @PathVariable(value = "userID") String id)
     {
         if (!this.canAccess(req, id))
-            return "this action requires elevated privileges";
-        User target = UserListHandler.getUser(id);
-        if (target == null) return "user not found";
+            return errorElevated(req);
 
-        return "k user found";
+        User target = UserListHandler.getUser(id);
+        if (target == null)
+            return GenericResponse.error(GenericResponse.buildErrorPLY(400,
+                    "Bad request", "User not found"), req.getRequestURI());
+
+        return GenericResponse.success(GenericResponse.buildSuccessPLY(
+                target), req.getRequestURI());
     }
 
     @RequestMapping("/users/{userID}/modules")
@@ -88,16 +90,20 @@ public class UserController {
     public String getUserModules(HttpServletRequest req, @PathVariable(value = "userID") String id)
     {
         if (!this.canAccess(req, id))
-            return "this action requires elevated privileges";
+            return errorElevated(req);
+
         User target = UserListHandler.getUser(id);
-        if (target == null) return "user not found";
+        if (target == null)
+            return GenericResponse.error(GenericResponse.buildErrorPLY(400,
+                    "Bad request", "User not found"), req.getRequestURI());
 
         String res = "user's modules:<br>";
         Set<Module> modules = target.getModules();
         for (Module current : modules) {
             res += "-" + current.getName() + "<br>";
         }
-        return res;
+        return GenericResponse.success(GenericResponse.buildSuccessPLY(
+                modules), req.getRequestURI());
     }
 
     @RequestMapping("/users/{userID}/modules/{moduleID}")
@@ -107,9 +113,12 @@ public class UserController {
                                 @PathVariable(value = "moduleID") String module)
     {
         if (!this.canAccess(req, id))
-            return "this action requires elevated privileges";
+            return errorElevated(req);
+
         User target = UserListHandler.getUser(id);
-        if (target == null) return "user not found";
+        if (target == null)
+            return GenericResponse.error(GenericResponse.buildErrorPLY(400,
+                    "Bad request", "User not found"), req.getRequestURI());
 
         String res = "target module:<br>";
         Set<Module> modules = target.getModules();
@@ -119,9 +128,12 @@ public class UserController {
                 tmodule = current;
         }
         if (tmodule == null)
-            return "unable to find requested module in user's modules list";
-        res += tmodule.getName();
-        return res;
+        return GenericResponse.error(GenericResponse.buildErrorPLY(400,
+                "Bad request",
+                "unable to find requested module in user's modules list"), req.getRequestURI());
+       // res += tmodule.getName();
+        return GenericResponse.success(GenericResponse.buildSuccessPLY(
+                tmodule), req.getRequestURI());
     }
 
     @RequestMapping("/users/{userID}/modules/{moduleID}/subscribe")
@@ -131,9 +143,12 @@ public class UserController {
                                 @PathVariable(value = "moduleID") String module)
     {
         if (!this.canAccess(req, id))
-            return "this action requires elevated privileges";
+            return errorElevated(req);
+
         User target = UserListHandler.getUser(id);
-        if (target == null) return "user not found";
+        if (target == null)
+            return GenericResponse.error(GenericResponse.buildErrorPLY(400,
+                    "Bad request", "User not found"), req.getRequestURI());
         
         Set<Module> modules = target.getModules();
         Module tmodule = null;
@@ -142,9 +157,14 @@ public class UserController {
                 tmodule = current;
         }
         if (tmodule == null)
-            return "unable to find requested module in user's modules list";
+            return GenericResponse.error(GenericResponse.buildErrorPLY(400,
+                    "Bad request",
+                    "unable to find requested module in user's modules list"), req.getRequestURI());
         if (!target.subscribe(tmodule))
-            return "unable to subscribe to module: " + tmodule.getName();
-        return "successfully subscribed to the module: " + tmodule.getName();
+            return GenericResponse.error(GenericResponse.buildErrorPLY(503,
+                    "Unknown error",
+                    "unable to subscribe to module: " + tmodule.getName()), req.getRequestURI());
+        return GenericResponse.success(GenericResponse.buildSuccessPLY(
+                "successfully subscribed to the module: " + tmodule.getName()), req.getRequestURI());
     }
 }

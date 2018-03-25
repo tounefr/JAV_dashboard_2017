@@ -12,7 +12,7 @@ public class GenericResponse {
 
     private static String fatalError = "{'status': 500, 'error': 'fatal', path: null}";
 
-    public static class ErrorPLY {
+    private static class ErrorPLY {
         public Long timestamp;
         public Integer status;
         public String path;
@@ -29,7 +29,7 @@ public class GenericResponse {
         return ret;
     }
 
-    public static class SuccessPLY {
+    private static class SuccessPLY {
         public Long timestamp;
         public Integer status = 200;
         public String path;
@@ -48,20 +48,23 @@ public class GenericResponse {
     public static String error(ErrorPLY error, final String path) {
         ObjectMapper mapper = new ObjectMapper();
         try {
+            error.path = path;
             String ret = mapper.writeValueAsString(error);
             return ret;
         } catch (JsonProcessingException ex) {
+            System.out.println("JACKSON: " + ex.getMessage());
             return fatalError;
         }
     }
 
     public static String success(SuccessPLY success, final String path) {
-        buildSuccessPLY("pbeu");
         ObjectMapper mapper = new ObjectMapper();
         try {
+            success.path = path;
             String ret = mapper.writeValueAsString(success);
             return ret;
         } catch (JsonProcessingException ex) {
+            System.out.println("JACKSON: " + ex.getMessage());
             return fatalError;
         }
     }
