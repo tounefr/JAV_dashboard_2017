@@ -47,6 +47,7 @@ export class AccountComponent implements OnInit {
         success => {
           this.alert('success', 'You\'re connected!')
           this.userService.toggleConnected()
+          localStorage.setItem('username', this.username)
           this.router.navigate(['/']);
       },
         error => {

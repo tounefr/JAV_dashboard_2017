@@ -7,14 +7,13 @@ import {AccountService} from "./account/account.service";
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
-  providers: [AlertService]
+  providers: []
 })
 export class AppComponent {
   title = 'app';
 
   constructor(
-    private accountService: AccountService,
-    private alertService: AlertService
+    private accountService: AccountService
   ) {
 
   }
