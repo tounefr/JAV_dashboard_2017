@@ -3,6 +3,8 @@ package eu.epitech.java.controller.rest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Date;
 
 public class GenericResponse {
@@ -16,15 +18,13 @@ public class GenericResponse {
         public Long timestamp;
         public Integer status;
         public String path;
-        public String error;
         public String message;
     }
 
-    public static ErrorPLY buildErrorPLY(Integer _status, String _error, String _message) {
+    public static ErrorPLY buildErrorPLY(Integer _status, String _message) {
         ErrorPLY ret = new ErrorPLY();
         ret.timestamp = new Date().getTime();
         ret.status = _status;
-        ret.error = _error;
         ret.message = _message;
         return ret;
     }
@@ -45,25 +45,33 @@ public class GenericResponse {
         return ret;
     }
 
-    public static String error(ErrorPLY error, final String path) {
+    public static String error(HttpServletResponse resp, ErrorPLY error, final String path) {
         ObjectMapper mapper = new ObjectMapper();
         try {
             error.path = path;
             String ret = mapper.writeValueAsString(error);
+            try {
+                resp.sendError(error.status, error.message);
+            } catch (IOException ex) {
+                System.out.println("HTTP error");
+            }
             return ret;
         } catch (JsonProcessingException ex) {
+            resp.setStatus(503);
             System.out.println("JACKSON: " + ex.getMessage());
             return fatalError;
         }
     }
 
-    public static String success(SuccessPLY success, final String path) {
+    public static String success(HttpServletResponse resp, SuccessPLY success, final String path) {
         ObjectMapper mapper = new ObjectMapper();
         try {
+            resp.setContentType("application/json;charset=utf-8");
             success.path = path;
             String ret = mapper.writeValueAsString(success);
             return ret;
         } catch (JsonProcessingException ex) {
+            resp.setStatus(503);
             System.out.println("JACKSON: " + ex.getMessage());
             return fatalError;
         }

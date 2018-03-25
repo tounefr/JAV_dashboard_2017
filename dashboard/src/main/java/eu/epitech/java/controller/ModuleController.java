@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @RestController
@@ -19,10 +20,10 @@ public class ModuleController {
 
     @RequestMapping("/modules")
     @ResponseBody
-    public String getModules(HttpServletRequest req)
+    public String getModules(HttpServletRequest req, HttpServletResponse resp)
     {
         List<Module> modules = ModuleListHandler.getModules();
-        return GenericResponse.success(GenericResponse.buildSuccessPLY(
+        return GenericResponse.success(resp, GenericResponse.buildSuccessPLY(
                 modules), req.getRequestURI());
     }
 }

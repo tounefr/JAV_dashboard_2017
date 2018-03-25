@@ -1,10 +1,13 @@
 package eu.epitech.java.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import eu.epitech.java.controller.rest.GenericResponse;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,6 +29,16 @@ public class AuthFilter extends UsernamePasswordAuthenticationFilter {
     @Override
     public Authentication attemptAuthentication(HttpServletRequest req,
                                                 HttpServletResponse resp) throws AuthenticationException {
+        if (SecurityContextHolder.getContext().getAuthentication() != null &&
+                SecurityContextHolder.getContext().getAuthentication().getPrincipal() != null) {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            if (!(auth instanceof AnonymousAuthenticationToken)) {
+                GenericResponse.error(resp, GenericResponse.buildErrorPLY(400,
+                        "Already logged in"), req.getRequestURI());
+                return null;
+            }
+        }
+
         try {
             StringBuilder buf = new StringBuilder();
             BufferedReader fd = req.getReader();
@@ -49,6 +62,7 @@ public class AuthFilter extends UsernamePasswordAuthenticationFilter {
             }
             UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(payload.username, payload.password);
             this.setDetails(req, authRequest);
+            resp.setHeader("Access-Control-Allow-Origin", "*");
             return this.getAuthenticationManager().authenticate(authRequest);
         } catch (IOException ex) {
             System.out.println(ERROR_MSG);

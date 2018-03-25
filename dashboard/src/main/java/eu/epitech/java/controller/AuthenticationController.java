@@ -1,5 +1,6 @@
 package eu.epitech.java.controller;
 
+import eu.epitech.java.controller.rest.GenericResponse;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -12,30 +13,14 @@ import javax.servlet.http.HttpServletResponse;
 public class AuthenticationController {
 
     @RequestMapping("/login")
-    public String loginPage (HttpServletRequest req, HttpServletResponse res) {
+    public String loginPage (HttpServletRequest req, HttpServletResponse resp) {
         if (SecurityContextHolder.getContext().getAuthentication().getPrincipal() != null) {
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             if (!(auth instanceof AnonymousAuthenticationToken)) {
-                System.out.println("ALREADY LOGGED IN");
-                res.setHeader("Location:", req.getHeader("referer"));
-                return null;
+                return GenericResponse.success(resp, GenericResponse.buildSuccessPLY(
+                        "successfully logged in, " + req.getUserPrincipal().getName()), req.getRequestURI());
             }
         }
         return null;
-    }
-
-    @RequestMapping("/login-error")
-    @ResponseBody
-    public String getError()
-    {
-        return "invalid credentials<br/><a href=\"/login\">Try again</a>";
-    }
-
-    // ça c'est juste à titre d'exemple pour par oublier ce qu'on peut faire d'un point de vue API
-    @RequestMapping("/get/{userID}")
-    @ResponseBody
-    public String getUser(@PathVariable(value = "userID") String id)
-    {
-        return ("user id  = " + id + ".");
     }
 }
