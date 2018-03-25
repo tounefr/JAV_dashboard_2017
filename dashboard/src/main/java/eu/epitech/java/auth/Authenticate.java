@@ -14,9 +14,10 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutHandler;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import eu.epitech.java.lists.UserListHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -41,6 +42,7 @@ public class Authenticate extends WebSecurityConfigurerAdapter {
         public void onAuthenticationSuccess(HttpServletRequest req,
                                             HttpServletResponse resp,
                                             Authentication authentication) throws IOException, ServletException {
+            System.out.println("user logged in.");
             //resp.sendRedirect("/login");
         }
     }
@@ -56,6 +58,35 @@ public class Authenticate extends WebSecurityConfigurerAdapter {
                     "Bad credentials"), req.getRequestURI());
         }
     }
+    
+   private class logoutHandler implements LogoutHandler {
+       @Override
+       public void logout(HttpServletRequest req, HttpServletResponse resp, Authentication authentication) {
+           if (authentication != null && authentication.isAuthenticated()) {
+               authentication.setAuthenticated(false);
+               resp.setStatus(200);
+               System.out.println("User logged out.");
+           }
+           else
+           {
+               GenericResponse.error(resp, GenericResponse.buildErrorPLY(400,
+                       "User not authenticated"), req.getRequestURI());
+               System.out.println("User not authenticated.");
+           }
+       }
+   }
+
+   private class logoutSuccess implements LogoutSuccessHandler {
+       @Override
+       public void onLogoutSuccess(HttpServletRequest req,
+                                   HttpServletResponse resp,
+                                   Authentication authentication) throws IOException, ServletException {
+           resp.setHeader("Access-Control-Allow-Origin", "http://dashboard.epitech.eu");
+           resp.setHeader("Access-Control-Allow-Credentials", "true");
+           resp.setStatus(200);
+
+       }
+   }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -65,10 +96,11 @@ public class Authenticate extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .antMatchers("/login**", "/users/register", "/css/**", "/error", "/h2admin/**").permitAll()
                 .antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("/connect/**").permitAll()
                 .antMatchers("/**").hasRole("USER")
                 .and()
-                .logout().logoutUrl("/logout")
+                .logout().
+                    logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET")).
+                    addLogoutHandler(new logoutHandler()).logoutSuccessHandler(new logoutSuccess())
                 ;
         http.csrf().disable(); // on est en localhost
         http.headers().frameOptions().sameOrigin(); // autoriser les frames pour h2console (h2admin)
