@@ -85,19 +85,19 @@ export class RequesterService {
     return this.http.get<string>(this.endpointUrl + 'logout', httpOptions)
   }
 
-  getAvailableModules(): Observable<string> {
-    return this.http.get(this.endpointUrl + "modules", httpOptions)
+  getAvailableModules(): Observable<Object> {
+    return this.http.get<Object>(this.endpointUrl + "modules", httpOptions)
   }
 
-  getUserModules(user: string): Observable<string> {
-    return this.http.get(this.endpointUrl + "users/" + user + "/modules", httpOptions)
+  getUserModules(user: string): Observable<Object> {
+    return this.http.get<Object>(this.endpointUrl + "users/" + user + "/modules", httpOptions)
   }
 
-  subscribeModule(id: string): Observable<string> {
-    return this.http.get(this.endpointUrl + "modules/" + id + "/subscribe", httpOptions)
+  subscribeModule(id: string): Observable<Object> {
+    return this.http.get<Object>(this.endpointUrl + "modules/" + id + "/subscribe", httpOptions)
   }
 
-  unsubscribeModule(id: string): Observable<string> {
-    return this.http.get(this.endpointUrl + "modules/" + id + "/unsubscribe", httpOptions)
+  unsubscribeModule(id: string): Observable<Object> {
+    return this.http.get<Object>(this.endpointUrl + "modules/" + id + "/unsubscribe", httpOptions)
   }
 }

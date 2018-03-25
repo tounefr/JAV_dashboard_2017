@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { PreferencesComponent } from '../preferences/preferences.component'
 import {ModuleService} from "../module.service";
 import {RequesterService} from "../requester.service";
@@ -16,7 +16,6 @@ import {FacebookComponent} from "../facebook/facebook.component";
 })
 export class DashboardComponent implements OnInit {
 
-  @Input moduleRegister;
   alerts: any = [];
   preferences: Preference[];
 
@@ -40,8 +39,9 @@ export class DashboardComponent implements OnInit {
       if (res === null)
         this.router.navigate(['/account']);
     })
-    this.requester.getUserModules('test').subscribe(res => {
-      res.payload.forEach(module => {
+    let username = localStorage.getItem('username')
+    this.requester.getUserModules(username).subscribe(res => {
+      res['payload'].forEach(module => {
         let preference = this.preferences.find(elem => elem.name === module.name)
         console.log(preference)
         preference.component.serviceActivated = true;
@@ -59,7 +59,7 @@ export class DashboardComponent implements OnInit {
     this.requester.subscribeModule(moduleRegister.value).subscribe(res => {
       elem.subscribed = true;
       elem.component.serviceActivated = true;
-      this.alerts.push({type: 'success', msg: res.payload})
+      this.alerts.push({type: 'success', msg: res['payload']})
     },
     error => {
       this.alerts.push({type: 'danger', msg: error.error.message})

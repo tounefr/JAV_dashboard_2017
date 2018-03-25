@@ -21,11 +21,6 @@ export class PreferencesComponent implements OnInit {
     private moduleService: ModuleService,
     private router: Router
   ) {
-    this.preferences = [
-      new Preference('CoinMarket'),
-      new Preference('Twitter'),
-      new Preference('Facebook')
-    ]
   }
 
   ngOnInit() {
@@ -34,8 +29,9 @@ export class PreferencesComponent implements OnInit {
         this.router.navigate(['/account']);
     })
 
-    this.requester.getUserModules('test').subscribe(res => {
-      res.payload.forEach(elem => {
+    let username = localStorage.getItem('username')
+    this.requester.getUserModules(username).subscribe(res => {
+      res['payload'].forEach(elem => {
 //        this.preferences.push(elem)
       })
     })
