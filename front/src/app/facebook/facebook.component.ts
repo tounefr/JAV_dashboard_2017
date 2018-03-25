@@ -30,6 +30,12 @@ export class FacebookComponent extends AService implements OnInit {
       .subscribe(isConnected => this.serviceConnected = Boolean(isConnected))
   }
 
+  unsubscribe(): void {
+    this.requester.unsubscribeModule(this.serviceName).subscribe(res => {
+      this.display = false;
+    })
+  }
+
   refresh(): void {
     this.checkConnected()
     this.getProfile()

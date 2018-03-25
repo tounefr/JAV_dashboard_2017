@@ -1,6 +1,7 @@
 
 import {AlertService} from "./alert.service";
 import { Component } from '@angular/core';
+import {AccountService} from "./account/account.service";
 
 @Component({
   selector: 'app-root',
@@ -11,7 +12,10 @@ import { Component } from '@angular/core';
 export class AppComponent {
   title = 'app';
 
-  constructor(private alertService: AlertService) {
+  constructor(
+    private accountService: AccountService,
+    private alertService: AlertService
+  ) {
 
   }
 

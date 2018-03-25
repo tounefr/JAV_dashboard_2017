@@ -3,6 +3,7 @@ package eu.epitech.java.auth;
 import eu.epitech.java.controller.rest.GenericResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -15,6 +16,7 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import eu.epitech.java.lists.UserListHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -39,8 +41,7 @@ public class Authenticate extends WebSecurityConfigurerAdapter {
         public void onAuthenticationSuccess(HttpServletRequest req,
                                             HttpServletResponse resp,
                                             Authentication authentication) throws IOException, ServletException {
-            System.out.println("user logged in.");
-            resp.sendRedirect("/login");
+            //resp.sendRedirect("/login");
         }
     }
 
@@ -61,8 +62,10 @@ public class Authenticate extends WebSecurityConfigurerAdapter {
         http
                 .addFilterBefore(JSONAuth(), UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
+                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .antMatchers("/login**", "/users/register", "/css/**", "/error", "/h2admin/**").permitAll()
                 .antMatchers("/admin/**").hasRole("ADMIN")
+                .antMatchers("/connect/**").permitAll()
                 .antMatchers("/**").hasRole("USER")
                 .and()
                 .logout().logoutUrl("/logout")

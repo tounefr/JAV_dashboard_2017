@@ -3,12 +3,12 @@
     <h3 class="panel-title"><span class="glyphicon glyphicon-th-large"></span> Preferences</h3>
   </div>
   <div class="panel-body">
-    <div *ngFor="let service of moduleService.services">
+    <div *ngFor="let preference of preferences">
 
       <div class="pretty p-default ">
-        <input [(ngModel)]="service.serviceActivated" (change)="moduleService.savePrefs()" type="checkbox" />
+        <input [(ngModel)]="preference.subscribed" (change)="toggleSubscribed($event)" type="checkbox" />
         <div class="state">
-          <label>{{service.serviceName}}</label>
+          <label>{{preference.name}}</label>
         </div>
       </div>
 

@@ -12,8 +12,8 @@ export class CoinmarketcapComponent extends AService implements OnInit {
 
   currencies: Currency[];
 
-  constructor(private requesterService: RequesterService) {
-    super('Coin Market Cap')
+  constructor(private requester: RequesterService) {
+    super('CoinMarket')
     this.currencies = [
       new Currency('bitcoin'),
       new Currency('zcash'),
@@ -29,10 +29,16 @@ export class CoinmarketcapComponent extends AService implements OnInit {
 
   getCurrencies(): void {
     this.currencies.forEach(currency => {
-      this.requesterService.getCurrency(currency.name)
+      this.requester.getCurrency(currency.name)
         .subscribe(currencyValue => {
           currency.value = Number(currencyValue)
         })
+    })
+  }
+
+  unsubscribe(): void {
+    this.requester.unsubscribeModule(this.serviceName).subscribe(res => {
+      this.display = false;
     })
   }
 

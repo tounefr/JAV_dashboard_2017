@@ -13,6 +13,7 @@ import { RequesterService } from './requester.service'
 import { HttpClientModule }    from '@angular/common/http';
 import { FormsModule } from '@angular/forms'
 import { AlertModule } from 'ngx-bootstrap/alert';
+import {AccountService} from "./account/account.service";
 
 @NgModule({
   declarations: [
@@ -31,11 +32,14 @@ import { AlertModule } from 'ngx-bootstrap/alert';
     HttpClientModule,
     AlertModule.forRoot()
   ],
-  providers: [RequesterService,
+  providers: [
+    RequesterService,
     TwitterComponent,
     FacebookComponent,
     CoinmarketcapComponent,
-    PreferencesComponent],
+    PreferencesComponent,
+    AccountService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

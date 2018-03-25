@@ -36,6 +36,12 @@ export class TwitterComponent extends AService implements OnInit {
       .subscribe(isConnected => this.serviceConnected = Boolean(isConnected))
   }
 
+  unsubscribe(): void {
+    this.requester.unsubscribeModule(this.serviceName).subscribe(res => {
+      this.display = false;
+    })
+  }
+
   getTweets(): void {
     this.tweets = this.requester.getTweets()
   }

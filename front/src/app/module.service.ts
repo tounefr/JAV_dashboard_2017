@@ -3,6 +3,7 @@ import { FacebookComponent } from './facebook/facebook.component'
 import { TwitterComponent } from './twitter/twitter.component'
 import { CoinmarketcapComponent } from './coinmarketcap/coinmarketcap.component'
 import { AService } from './AService'
+import {RequesterService} from "./requester.service";
 
 @Injectable()
 export class ModuleService {
@@ -10,6 +11,7 @@ export class ModuleService {
   services: AService[];
 
   constructor(
+    private requester: RequesterService,
     private twitterComponent: TwitterComponent,
     private facebookComponent: FacebookComponent,
     private coinMarketCap: CoinmarketcapComponent) {

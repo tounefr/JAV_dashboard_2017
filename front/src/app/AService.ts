@@ -1,4 +1,4 @@
-import { Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 export class AService {
 
@@ -6,11 +6,15 @@ export class AService {
   serviceActivated: boolean;
   serviceConnected: boolean;
   serviceConnectUrl: string;
+  display: boolean;
 
-  constructor(serviceName: string, serviceConnectUrl: string = '') {
+  constructor(
+    serviceName: string,
+    serviceConnectUrl: string = '') {
     this.serviceName = serviceName;
-    this.serviceActivated = true;
+    this.serviceActivated = false;
     this.serviceConnected = false;
+    this.display = true;
     this.serviceConnectUrl = serviceConnectUrl;
   }
 

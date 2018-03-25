@@ -28,7 +28,7 @@ public class App {
                 registry.addMapping("/**")
                         .allowedMethods("*")
                         .allowCredentials(true)
-                        .allowedOrigins("*");
+                        .allowedOrigins("http://dashboard.epitech.eu");
             }
         };
     }

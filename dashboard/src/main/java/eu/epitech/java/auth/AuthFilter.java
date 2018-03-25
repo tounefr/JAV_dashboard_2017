@@ -62,7 +62,8 @@ public class AuthFilter extends UsernamePasswordAuthenticationFilter {
             }
             UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(payload.username, payload.password);
             this.setDetails(req, authRequest);
-            resp.setHeader("Access-Control-Allow-Origin", "*");
+            resp.setHeader("Access-Control-Allow-Origin", "http://dashboard.epitech.eu");
+            resp.setHeader("Access-Control-Allow-Credentials", "true");
             return this.getAuthenticationManager().authenticate(authRequest);
         } catch (IOException ex) {
             System.out.println(ERROR_MSG);
