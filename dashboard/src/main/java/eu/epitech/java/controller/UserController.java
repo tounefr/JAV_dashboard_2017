@@ -73,7 +73,6 @@ public class UserController {
     public String getUser(HttpServletRequest req, HttpServletResponse resp,
                           @PathVariable(value = "userID") String id)
     {
-        //aresp.setContentType("application/json");
         if (!this.canAccess(req, id))
             return errorElevated(req, resp);
 
