@@ -1,24 +1,18 @@
 
-import { Component, SecurityContext } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
+import {AlertService} from "./alert.service";
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
+  providers: [AlertService]
 })
 export class AppComponent {
   title = 'app';
 
-  alerts: any = [];
-
-  constructor(sanitizer: DomSanitizer) {
-    this.alerts = this.alerts.map((alert: any) => ({
-      type: alert.type,
-      msg: sanitizer.sanitize(SecurityContext.HTML, alert.msg)
-    }));
+  constructor(private alertService: AlertService) {
 
   }
-
 
 }

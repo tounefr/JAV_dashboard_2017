@@ -20,7 +20,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
 
 @EnableWebSecurity
 public class Authenticate extends WebSecurityConfigurerAdapter {
@@ -61,12 +60,12 @@ public class Authenticate extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .addFilterBefore(JSONAuth(), UsernamePasswordAuthenticationFilter.class)
-                //.formLogin().loginPage("/login").failureUrl("/login-error")
-                //.and()
+//                .formLogin().loginPage("/login").failureUrl("/login-error")
+//                .and()
                 .authorizeRequests()
                 .antMatchers("/login**", "/users/register", "/css/**", "/error", "/h2admin/**").permitAll()
                 .antMatchers("/admin/**").hasRole("ADMIN")
-            //    .antMatchers("/**").hasRole("USER")
+                .antMatchers("/**").hasRole("USER")
                 .and()
                 .logout().logoutUrl("/logout")
                 ;

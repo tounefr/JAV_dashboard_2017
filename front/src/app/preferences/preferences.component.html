@@ -3,10 +3,10 @@
     <h3 class="panel-title"><span class="glyphicon glyphicon-th-large"></span> Preferences</h3>
   </div>
   <div class="panel-body">
-    <div *ngFor="let service of services">
+    <div *ngFor="let service of moduleService.services">
 
       <div class="pretty p-default ">
-        <input [(ngModel)]="service.serviceActivated" (change)="savePrefs()" type="checkbox" />
+        <input [(ngModel)]="service.serviceActivated" (change)="moduleService.savePrefs()" type="checkbox" />
         <div class="state">
           <label>{{service.serviceName}}</label>
         </div>

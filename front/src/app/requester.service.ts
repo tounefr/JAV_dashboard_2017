@@ -9,8 +9,16 @@ import { Stats } from './twitter/stats'
 import { Tweet } from './twitter/tweet'
 import { Profile } from './twitter/profile'
 import {Profile as FacebookProfile} from './facebook/profile'
+import {LoginResponse} from './account/LoginResponse'
 
 import { Currency } from './coinmarketcap/currency'
+import {Post} from "./facebook/post";
+
+const httpOptions = {
+  headers: new HttpHeaders({
+    'Content-Type':  'application/json'
+  })
+};
 
 @Injectable()
 export class RequesterService {
@@ -47,8 +55,16 @@ export class RequesterService {
     return this.http.get<boolean>(this.endpointUrl + 'facebook/connected')
   }
 
-  loginRequest(username: string, password: string): Observable<boolean>{
-    return this.http.get<boolean>(this.endpointUrl + 'login')
+  facebookTimeline(): Observable<Post[]> {
+    return this.http.get<Post[]>(this.endpointUrl + 'facebook/feed-posts')
+  }
+
+  loginRequest(username: string, password: string): Observable<LoginResponse>{
+    return this.http.post<LoginResponse>(this.endpointUrl + 'login', {username: username, password: password})
+  }
+
+  registerRequest(username: string, password: string): Observable<string> {
+    return this.http.post<string>(this.endpointUrl + 'users/register', {username: username, password: password})
   }
 
   getFacebookProfile(): Observable<FacebookProfile> {
