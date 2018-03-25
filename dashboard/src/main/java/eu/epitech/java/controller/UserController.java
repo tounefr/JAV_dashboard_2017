@@ -40,8 +40,6 @@ public class UserController {
     public String registerUser(HttpServletRequest req, HttpServletResponse resp,
                                @RequestBody UserPLY payload)
     {
-        System.out.println("user: ");
-        System.out.println(payload.username);
         try {
             if (payload.username == null || payload.password == null) {
                 return GenericResponse.error(resp, GenericResponse.buildErrorPLY(400,
@@ -49,8 +47,8 @@ public class UserController {
             }
             UserListHandler.addUser(payload.username, payload.password, false);
         } catch (UserListHandler.UHLException e) {
-            return GenericResponse.error(resp, GenericResponse.buildErrorPLY(503,
-                    "\"error: \" + e.getMessage()"), req.getRequestURI());
+            return GenericResponse.error(resp, GenericResponse.buildErrorPLY(400,
+                    "error: "  + e.getMessage()), req.getRequestURI());
         }
 
         return GenericResponse.success(resp, GenericResponse.buildSuccessPLY(
@@ -137,11 +135,13 @@ public class UserController {
                 tmodule), req.getRequestURI());
     }
 
-    @RequestMapping("/users/{userID}/modules/{moduleID}/subscribe")
+    @RequestMapping(value = "/users/{userID}/modules/{moduleID}/config",
+            method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public String subUserModule(HttpServletRequest req, HttpServletResponse resp,
+    public String configModule(HttpServletRequest req, HttpServletResponse resp,
                                 @PathVariable(value = "userID") String id,
-                                @PathVariable(value = "moduleID") String module)
+                                @PathVariable(value = "moduleID") String module,
+                                @RequestBody String payload)
     {
         if (!this.canAccess(req, id))
             return errorElevated(req, resp);
@@ -157,13 +157,21 @@ public class UserController {
             if (current.getName().equals(module))
                 tmodule = current;
         }
+
         if (tmodule == null)
             return GenericResponse.error(resp, GenericResponse.buildErrorPLY(400,
                     "unable to find requested module in user's modules list"), req.getRequestURI());
+        Module.MSettings config = tmodule.checkSettings(payload);
+        if (config == null || !tmodule.setSettings(config))
+            return GenericResponse.error(resp, GenericResponse.buildErrorPLY(503,
+                    "unable to configure: " + tmodule.getName() + ": invalid payload."), req.getRequestURI());
+        /*
         if (!target.subscribe(tmodule))
             return GenericResponse.error(resp, GenericResponse.buildErrorPLY(503,
                     "unable to subscribe to module: " + tmodule.getName()), req.getRequestURI());
+                    */
+        UserListHandler.commit(target);
         return GenericResponse.success(resp, GenericResponse.buildSuccessPLY(
-                "successfully subscribed to the module: " + tmodule.getName()), req.getRequestURI());
+                "successfully configured the module: " + tmodule.getName()), req.getRequestURI());
     }
 }

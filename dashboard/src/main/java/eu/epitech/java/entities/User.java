@@ -1,11 +1,6 @@
 package eu.epitech.java.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Column;
-import javax.persistence.Table;
-import javax.persistence.ElementCollection;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Set;
 
@@ -21,6 +16,7 @@ public class User implements Serializable {
     private boolean admin;
 
     @Column(name = "modules")
+    @CollectionTable(joinColumns=@JoinColumn(name="owner"))
     @ElementCollection
     private Set<Module> modules;
 

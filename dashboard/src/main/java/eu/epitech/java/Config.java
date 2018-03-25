@@ -1,31 +1,29 @@
 package eu.epitech.java;
 
+import eu.epitech.java.entities.Module;
+import eu.epitech.java.entities.modules.CoinMarketModule;
+import eu.epitech.java.entities.modules.FacebookModule;
+import eu.epitech.java.entities.modules.TwitterModule;
 import eu.epitech.java.lists.ModuleListHandler;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Configuration
 public class Config {
-    @Bean
-    @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
-    public String testSingleTon() {
-        System.out.println("_________---------------------_____________________-------------------");
-        return "yes m9";
-    }
-
     @Bean
     public FilterRegistrationBean corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.addAllowedOrigin("http://dashboard.epitech.eu");
+        config.addAllowedOrigin("*");
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         source.registerCorsConfiguration("/**", config);
@@ -37,11 +35,26 @@ public class Config {
     public Config() {
     }
 
-    /*
     @Autowired
     ModuleListHandler ModuleListHandler;
-    public void loadModules() {
-        
+
+    @Bean
+    public boolean loadModules() {
+        try {
+            Set<Module> modules = new HashSet<Module>();
+            modules.add(new FacebookModule());
+            modules.add(new TwitterModule());
+            modules.add(new CoinMarketModule());
+
+            for (Module current : modules) {
+                if (ModuleListHandler.getModule(current.getName(), null) == null)
+                    ModuleListHandler.addModule(current, null);
+            }
+            
+            return true;
+        } catch (ModuleListHandler.MLHException ex) {
+            System.out.println("Fatal error while loading custom module: " + ex.getMessage());
+            return false;
+        }
     }
-    */
 }

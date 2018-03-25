@@ -5,11 +5,8 @@ package eu.epitech.java;
  *
  */
 
-import eu.epitech.java.entities.modules.TestModule;
-import eu.epitech.java.lists.ModuleList;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 
@@ -37,14 +34,6 @@ public class App {
     }
 
     public static void main (String[] args) {
-       // SpringApplication.run(App.class, args);
-
-        ConfigurableApplicationContext context = SpringApplication.run(App.class, args);
-        //test
-        ModuleList repo = context.getBean(ModuleList.class);
-        repo.deleteAll();
-        repo.save(new TestModule());
-        System.out.println(repo.count());
-        System.out.println(repo.findAll().get(0).getName());
+        SpringApplication.run(App.class, args);
     }
 }

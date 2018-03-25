@@ -60,8 +60,6 @@ public class Authenticate extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .addFilterBefore(JSONAuth(), UsernamePasswordAuthenticationFilter.class)
-//                .formLogin().loginPage("/login").failureUrl("/login-error")
-//                .and()
                 .authorizeRequests()
                 .antMatchers("/login**", "/users/register", "/css/**", "/error", "/h2admin/**").permitAll()
                 .antMatchers("/admin/**").hasRole("ADMIN")
@@ -88,13 +86,6 @@ public class Authenticate extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        /*
-        List<User> users = UserListHandler.getUsers();
-        for (User current : users) {
-            auth.inMemoryAuthentication().withUser(current.getUsername()).password(current.getPassword())
-                    .roles((current.isAdmin()) ? "ADMIN" : "USER");
-        }
-        */
         auth.authenticationProvider(authenticationProvider());
     }
 }

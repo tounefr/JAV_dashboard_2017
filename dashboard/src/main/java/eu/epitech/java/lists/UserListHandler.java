@@ -18,6 +18,10 @@ public class UserListHandler {
     @Autowired
     private UserList UserList;
 
+    public User commit(final User target) {
+        return UserList.save(target);
+    }
+    
     public List<User> getUsers() {
         return UserList.findAll();
     }

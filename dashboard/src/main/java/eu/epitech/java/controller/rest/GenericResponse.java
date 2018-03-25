@@ -1,5 +1,6 @@
 package eu.epitech.java.controller.rest;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -47,6 +48,7 @@ public class GenericResponse {
 
     public static String error(HttpServletResponse resp, ErrorPLY error, final String path) {
         ObjectMapper mapper = new ObjectMapper();
+        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         try {
             error.path = path;
             String ret = mapper.writeValueAsString(error);
@@ -65,6 +67,7 @@ public class GenericResponse {
 
     public static String success(HttpServletResponse resp, SuccessPLY success, final String path) {
         ObjectMapper mapper = new ObjectMapper();
+        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         try {
             resp.setContentType("application/json;charset=utf-8");
             success.path = path;
