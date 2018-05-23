@@ -14,3 +14,7 @@ services:
       - ./front:/app
     ports:
       - 80:4200
+  api:
+    build: ./dashboard 
+    ports:
+      - 8080:8080 
